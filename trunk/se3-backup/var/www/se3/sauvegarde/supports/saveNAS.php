@@ -1,5 +1,31 @@
 <?php
-	require ("config.inc.php");
+
+
+
+ /**
+
+   * Permet configurer la sauvegarde sur NAS (Backuppc)
+   * @Version $Id$
+
+   * @Projet LCS / SambaEdu
+
+   * @auteurs
+
+   * @Licence Distribue selon les termes de la licence GPL
+
+   * @note
+
+   */
+
+   /**
+
+   * @Repertoire: sauvegarde/supports
+   * file: saveNAS.php
+
+  */
+
+
+require ("config.inc.php");
    	require_once ("functions.inc.php");
 	require ("ldap.inc.php");
 	require ("ihm.inc.php");
@@ -131,6 +157,6 @@
 	}
 
 
-	die("Modifications réalisées avec succes !");
+	die("Modifications rï¿½alisï¿½es avec succes !");
 
 ?>
