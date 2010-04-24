@@ -1,5 +1,5 @@
 #! /bin/sh
-#$Id$
+# $Id$
 # postinst script for smbedu
 #
 # see: dh_installdeb(1)
