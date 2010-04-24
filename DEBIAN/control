@@ -1,0 +1,11 @@
+Package: se3-backup
+Version: #VERSION#
+Section: contrib
+Priority: optional
+Architecture: all
+Conflicts: 
+Replaces: 
+Depends: backuppc, rsync
+Installed-Size: 1024
+Maintainer: Plouf<plouf@sambaedu.org>
+Description: Scripts d'installation de backuppc pour SambaEdu
