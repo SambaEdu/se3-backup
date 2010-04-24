@@ -1,4 +1,5 @@
 #! /bin/sh
+# $Id$
 # postrm script for smbedu
 #
 # see: dh_installdeb(1)
