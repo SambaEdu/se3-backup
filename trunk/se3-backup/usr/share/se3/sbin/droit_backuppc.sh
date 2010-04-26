@@ -1,5 +1,5 @@
 #!/bin/bash
-## $Id: droit_backuppc.sh 5363 2010-04-02 23:58:31Z keyser $ ##
+## $Id: droit_backuppc.sh 5443 2010-04-25 23:41:01Z keyser $ ##
 #
 ##### Permet de positionner les droits pour backuppc #####
 #
@@ -28,6 +28,11 @@ chmod 640 /etc/SeConfig.ph
 chown $bck_user /usr/share/backuppc/cgi-bin/index.cgi
 chmod u+s /usr/share/backuppc/cgi-bin/index.cgi
 chown -R $bck_user /var/run/backuppc
-getfacl /var/lib/backuppc 2>/dev/null|grep owner|grep $bck_user||chown -R $bck_user /var/lib/backuppc
+if [ -h /var/lib/backuppc ]; then
+repsauve=$(readlink /var/lib/backuppc)
+else
+repsauve="/var/lib/backuppc"
+fi
+getfacl $repsauve 2>/dev/null|grep owner|grep $bck_user||chown -R $bck_user $repsauve
 [ "$bpc_etat" == "1" ] &&  invoke-rc.d backuppc start
 
