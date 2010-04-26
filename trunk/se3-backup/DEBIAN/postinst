@@ -46,10 +46,11 @@ case "$1" in
 
 	test_exist=`echo "SELECT value FROM params WHERE name='backuppc'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 	if [ "$test_exist" != "1" ]; then # vide donc on a une primo install
-		echo "INSERT INTO params VALUES ('', 'backuppc', '0', 0, 'Active backuppc de l'interface', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+                uid_backuppc=`getent passwd backuppc | cut -d : -f3`
+            	echo "INSERT INTO params VALUES ('', 'backuppc', '0', 0, 'Active backuppc de l'interface', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
 		echo "INSERT INTO params VALUES ('', 'bpcmedia', '0', 0, 'Media de sauvegarde pour backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
 		echo "INSERT INTO params VALUES ('', 'bck_user', 'backuppc', 0, 'Utilisateur proprietaire backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
-                echo "INSERT INTO params VALUES ('', 'bck_uidnumber', '0', 0, 'uidnumber proprietaire backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+                echo "INSERT INTO params VALUES ('', 'bck_uidnumber', '$uid_backuppc', 0, 'uidnumber proprietaire backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
 
                 rm -f /etc/backuppc/localhost.pl
                 rm -f /etc/backuppc/config.pl
