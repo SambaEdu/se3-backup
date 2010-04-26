@@ -1,5 +1,11 @@
 #!/bin/bash
 #
+
+#
+# $Id$
+#
+
+
 # Verifie le point de montage du peripherique de backup
 # BPCMEDIA=1 --> disque USB
 # BPCMEDIA=2 --> disque dur
