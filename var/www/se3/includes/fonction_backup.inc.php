@@ -153,19 +153,19 @@ function variables($Name,$HostServer) { // Retourne la valeur de la variable $Na
 	if (file_exists("$filename")) { //Si le fichier existe on recherche les valeurs
 	         $lignes = file("$filename");
 	         foreach ($lignes as $num => $ligne) {
-	               if (ereg ("$Conf{$Name}.*=(.*);",$ligne, $reg)) {
-			 if (ereg ("\[(.*)\]",$reg[1],$reg2)) {
+	               if (preg_match ("/$Conf{$Name}.*=(.*);/",$ligne, $reg)) {
+			 if (preg_match ("/\[(.*)\]/",$reg[1],$reg2)) {
 			 	$variable = trim ($reg2[1]);
 				return $variable;
 			    }	   
-		             if (ereg ("'(.*)'",$reg[1],$reg2)) {
+		             if (preg_match("/'(.*)'/",$reg[1],$reg2)) {
 			     	   $variable = trim($reg2[1]);
 			           return $variable;
 			     }
 			 $variable = trim($reg[1]);    
 			 return $variable;     
 	                 }
-			 if (ereg ("$Name.*=>(.*),",$ligne,$reg)) {
+			 if (preg_match ("/$Name.*=>(.*),/",$ligne,$reg)) {
 			 	$variable = trim($reg[1]);
 			 	return $variable;
 			}	
