@@ -1,0 +1,93 @@
+#! /bin/sh
+# $Id$
+# postinst script for smbedu
+#
+# see: dh_installdeb(1)
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see /usr/doc/packaging-manual/
+#
+# quoting from the policy:
+#     Any necessary prompting should almost always be confined to the
+#     post-installation script, and should be protected with a conditional
+#     so that unnecessary prompting doesn't happen if a package's
+#     installation fails and the `postinst' is called with `abort-upgrade',
+#     `abort-remove' or `abort-deconfigure'.
+case "$1" in
+    configure)
+	echo "Installation de BackupPc en cours......"
+        # Stop BackupPc
+	if [ -e "/var/run/backuppc/BackupPC.pid" ]; then
+		invoke-rc.d backuppc stop
+	fi
+	# degage conf paquet backuppc
+        # voir si on installe sur une ancienne version, deplacer les fichiers existants ???
+        #
+        /usr/share/se3/scripts/permbackuppc
+
+	# init var mysql connexion, masques et backup        
+	. /usr/share/se3/includes/config.inc.sh -cmb 
+	
+	
+	. /usr/share/se3/includes/functions.inc.sh
+	# SETMYSQL \"name\" \"valeur\" \"description\" \"n° categorie\"
+
+
+	if [ -z "$backuppc" ]; then
+		# cas primo installationon vire donc localhost.pl
+		SETMYSQL "backuppc" "1" "Active backuppc de l\'interface" "5"
+		if [ -e /etc/backuppc/localhost.pl ]; then
+                	rm -f /etc/backuppc/localhost.pl
+                fi
+	fi
+
+	if [ -z "$bpcmedia" ]; then
+		SETMYSQL "bpcmedia" "0" "Media de sauvegarde pour backuppc" "5" 
+	fi
+
+	if [ -z "$bck_user" ]; then
+		SETMYSQL "bck_user" "backuppc" "Utilisateur proprietaire backuppc" "5"
+	fi
+
+	if [ -z "$bck_uidnumber" ]; then
+		uid_backuppc=`getent passwd backuppc | cut -d : -f3`
+		SETMYSQL "bck_uidnumber" "$uid_backuppc" "uidnumber proprietaire backuppc" "5"
+	fi
+         
+         # Conf d'apache2se
+         # EN cas de residu de la version Etch
+        if [ -e /etc/apache2se/sites-enabled/backuppc ]; then  
+        	rm -f /etc/apache2se/sites-enabled/backuppc
+	fi
+        
+	usermod -G backuppc -a www-se3
+
+	if [ ! -e /etc/apache2se/sites-enabled/backuppc.conf ]; then  
+        	ln -s /etc/backuppc/apache2se.conf /etc/apache2se/sites-enabled/backuppc.conf
+        fi         
+
+         # On recharge la conf d'apache2se
+         /etc/init.d/apache2se reload
+
+         # Modifie la conf par defaut
+         perl -pi -e "s/Conf{Language} = 'en'/Conf{Language} = 'fr'/" /etc/backuppc/config.pl
+
+        # Ajout dans sudoers
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0
