@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-## $Id: umountusbdisk.sh 4428 2009-09-19 15:32:26Z gnumdk $ ##
+## $Id$ ##
 #
 ##### Démonte le disque USB ou NAS #####
 #

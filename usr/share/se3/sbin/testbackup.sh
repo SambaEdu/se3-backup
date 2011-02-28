@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-## $Id: testbackup.sh 4428 2009-09-19 15:32:26Z gnumdk $ ##
+## $Id$ ##
 #
 
 if [ "$1" = "--help" -o "$1" = "-h" ]

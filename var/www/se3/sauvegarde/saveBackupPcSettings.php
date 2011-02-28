@@ -1,4 +1,22 @@
 <?php
+
+
+   /**
+
+   * Change le proprio pour le NAS (Backuppc)
+   * Ajout du support de NAS
+   * @Version $Id$
+
+   * @Projet LCS / SambaEdu
+
+   * @auteurs Philippe Chadefaux Wawa MrT
+
+   * @Licence Distribue selon les termes de la licence GPL
+
+   * @note
+
+   */
+
 	require ("config.inc.php");
    	require_once ("functions.inc.php");
 	require ("ldap.inc.php");
@@ -48,6 +66,6 @@
 
 
 	exec ("sudo /usr/share/se3/sbin/chgbpcuser.sh");
-	die("Modifications réalisées avec succes !");
+	die("Modifications rï¿½alisï¿½es avec succes !");
 
 ?>

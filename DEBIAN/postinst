@@ -26,45 +26,62 @@ case "$1" in
     configure)
 	echo "Installation de BackupPc en cours......"
         # Stop BackupPc
-        /etc/init.d/backuppc stop 2>/dev/null
+	if [ -e "/var/run/backuppc/BackupPC.pid" ]; then
+		invoke-rc.d backuppc stop
+	fi
 	# degage conf paquet backuppc
         # voir si on installe sur une ancienne version, deplacer les fichiers existants ???
         #
-        /usr/share/se3/sbin/permse3
+        /usr/share/se3/scripts/permbackuppc
 
-        WWWPATH="/var/www"
-	## recuperation des variables necessaires pour interoger mysql ###
-	if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-		dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f2 | cut -d \" -f2`
-		dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut	-d = -f 2 |cut -d \" -f 2`
-		dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 | cut -d \" -f 2`
-		dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 | cut -d \" -f 2`
-	else
-		echo "Fichier de configuration inaccessible, le script ne peut se poursuivre."
-		exit 1
+	# init var mysql connexion, masques et backup        
+	. /usr/share/se3/includes/config.inc.sh -cmb 
+	
+	
+	. /usr/share/se3/includes/functions.inc.sh
+	# SETMYSQL \"name\" \"valeur\" \"description\" \"n° categorie\"
+
+
+	if [ -z "$backuppc" ]; then
+		# cas primo installationon vire donc localhost.pl
+		SETMYSQL "backuppc" "1" "Active backuppc de l\'interface" "5"
+		if [ -e /etc/backuppc/localhost.pl ]; then
+                	rm -f /etc/backuppc/localhost.pl
+                fi
 	fi
 
-	test_exist=`echo "SELECT value FROM params WHERE name='backuppc'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-	if [ "$test_exist" != "1" ]; then # vide donc on a une primo install
-                uid_backuppc=`getent passwd backuppc | cut -d : -f3`
-            	echo "INSERT INTO params VALUES ('', 'backuppc', '0', 0, 'Active backuppc de l'interface', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
-		echo "INSERT INTO params VALUES ('', 'bpcmedia', '0', 0, 'Media de sauvegarde pour backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
-		echo "INSERT INTO params VALUES ('', 'bck_user', 'backuppc', 0, 'Utilisateur proprietaire backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
-                echo "INSERT INTO params VALUES ('', 'bck_uidnumber', '$uid_backuppc', 0, 'uidnumber proprietaire backuppc', 5)" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+	if [ -z "$bpcmedia" ]; then
+		SETMYSQL "bpcmedia" "0" "Media de sauvegarde pour backuppc" "5" 
+	fi
 
-                rm -f /etc/backuppc/localhost.pl
-                rm -f /etc/backuppc/config.pl
-         fi # Si pas vide donc backuppc est deja actif, on touche pas au repertoire /etc/backuppc
+	if [ -z "$bck_user" ]; then
+		SETMYSQL "bck_user" "backuppc" "Utilisateur proprietaire backuppc" "5"
+	fi
 
+	if [ -z "$bck_uidnumber" ]; then
+		uid_backuppc=`getent passwd backuppc | cut -d : -f3`
+		SETMYSQL "bck_uidnumber" "$uid_backuppc" "uidnumber proprietaire backuppc" "5"
+	fi
+         
+         # Conf d'apache2se
+         # EN cas de residu de la version Etch
+        if [ -e /etc/apache2se/sites-enabled/backuppc ]; then  
+        	rm -f /etc/apache2se/sites-enabled/backuppc
+	fi
+        
+	usermod -G backuppc -a www-se3
 
-        # voir si on doit redescendre les droits car si backuppc est deja actif cela peut etre tres long
-        # /usr/share/se3/sbin/droit_backuppc.sh
+	if [ ! -e /etc/apache2se/sites-enabled/backuppc.conf ]; then  
+        	ln -s /etc/backuppc/apache2se.conf /etc/apache2se/sites-enabled/backuppc.conf
+        fi         
 
-        # Cree le lien symbolique pour Lib.pm en fonction de l'OS
-        ln -s /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm.lenny /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm
+         # On recharge la conf d'apache2se
+         /etc/init.d/apache2se reload
+
+         # Modifie la conf par defaut
+         perl -pi -e "s/Conf{Language} = 'en'/Conf{Language} = 'fr'/" /etc/backuppc/config.pl
+
         # Ajout dans sudoers
-
-	)
     ;;
 
     *)

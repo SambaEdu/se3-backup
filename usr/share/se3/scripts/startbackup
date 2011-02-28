@@ -1,12 +1,19 @@
 #!/bin/sh
 #
-### $Id: startbackup 4428 2009-09-19 15:32:26Z gnumdk $ ###
+### $Id$ ###
 #
 
 ##### Script pour lancer ou stopper  via sudo backuppc #####
 
-[ ! -d /var/lib/backuppc/pc ] && mkdir /var/lib/backuppc/pc
-[ ! -d /var/lib/backuppc/cpool ] && mkdir /var/lib/backuppc/cpool
+if [ ! -d /var/lib/backuppc/pc ]; then
+mkdir /var/lib/backuppc/pc
+chown backuppc:backuppc /var/lib/backuppc/pc
+fi
+
+if [ ! -d /var/lib/backuppc/cpool ]; then
+mkdir /var/lib/backuppc/cpool
+chown backuppc:backuppc /var/lib/backuppc/cpool
+fi
 
 if [ "$1" = "stop" -o  "$1" = "start"  -o  "$1" = "reload"  -o  "$1" = "restart" ]
 then
@@ -36,7 +43,7 @@ if [ "$1" = "start" ]
 then
 	ps ax|grep BackupPC >/dev/null|| (
 		echo "Correction droits sur backuppc"
-		/usr/share/se3/sbin/droit_backuppc.sh
+		/usr/share/se3/sbin/permbackuppc.sh
 		/etc/init.d/backuppc start
 	)
 	update-rc.d -f backuppc remove

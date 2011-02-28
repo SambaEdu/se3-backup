@@ -30,6 +30,7 @@ require ("config.inc.php");
 require ("ldap.inc.php");
 require ("ihm.inc.php");
 include ("fonction_backup.inc.php");
+include ("fonctions_rsyncdconf.inc.php");
 
 require_once("lang.inc.php");
 
@@ -109,14 +110,14 @@ if (is_admin("system_is_admin",$login)=="Y") {
   		echo "<tr><td width=\"40%\">".gettext("Type de machine :")."</td>
       		<td><select name=\"TypeServer\" ONCHANGE=\"this.form.submit();\">
       		<option value=\"\">".gettext("S&#233;lectionner")."</option>";
-  		echo "<option"; if ($TypeServer=="Local") { echo " selected"; } echo " VALUE=\"Local\">Se3 ".gettext("local")."</option>";
-  		echo "<option"; if ($TypeServer=="Se3") { echo " selected"; } echo " VALUE=\"Se3\">Se3 ".gettext("distant")."</option>";
-  		echo "<option"; if ($TypeServer=="Slis") { echo " selected"; } echo ">Slis</option>";
+  		echo "<option"; if ($TypeServer=="Local") { echo " selected"; } echo " VALUE=\"Local\">Local</option>";
+  		echo "<option"; if ($TypeServer=="Se3") { echo " selected"; } echo " VALUE=\"Se3\">Se3 </option>";
+  		// echo "<option"; if ($TypeServer=="Slis") { echo " selected"; } echo ">Slis</option>";
   		echo "<option"; if ($TypeServer=="Lcs") { echo " selected"; } echo ">Lcs</option>";
-  		echo "<option"; if ($TypeServer=="WinXP") { echo " selected"; } echo " VALUE=\"WinXP\">Windows (smb)</option>";
-  		echo "<option"; if ($TypeServer=="WinRsync") { echo " selected"; } echo " VALUE=\"WinRsync\">Windows (rsyncd)</option>";
+  		//echo "<option"; if ($TypeServer=="WinXP") { echo " selected"; } echo " VALUE=\"WinXP\">Windows (smb)</option>";
+  		// echo "<option"; if ($TypeServer=="WinRsync") { echo " selected"; } echo " VALUE=\"WinRsync\">Windows (rsyncd)</option>";
   		echo "<option"; if ($TypeServer=="Autre") { echo " selected"; } echo ">".gettext("Autre")."</option>";
-  		echo "</select>&nbsp;<u onmouseover=\"return escape".gettext("('S&#233;lectionner le type de machine que vous souhaitez sauvegarder.<br><br> - Si la machine &#224; sauvegarder est la machine sur laquelle tourne le serveur de sauvegarde, s&#233;lectionner Se3 local.<br><br> - Pour un Se3, sur une autre machine s&#233;lectionner Se3 distant.<br><br> - Pour sauvegarder une machine Windows avec le protocole samba s&#233;lectionner Windows (smb)<br><br> - Pour une machine Windows en utilisant rsyncd, s&#233;lectionner Windows (rsync). Cela n&#233;cessite d\'installer rsyncd sur la machine windows &#224; sauvegarder.<br><br>En fonction du choix que vous faites, des configurations vous seront propos&#233;es. Il vous est toujours possible de faire un autre choix en s&#233;lectionnant Autre.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
+  		echo "</select>&nbsp;<u onmouseover=\"return escape".gettext("('S&#233;lectionner le type de machine que vous souhaitez sauvegarder.<br><br> - Si la machine &#224; sauvegarder est la machine sur laquelle tourne le serveur de sauvegarde, s&#233;lectionner Local.<br><br> - Pour un Se3 ou LCS, sur une autre machine s&#233;lectionner Se3 ou LCS, et installer rsyncd sur ce Se3 ou LCS distant.<br><br> - Pour sauvegarder une machine Windows avec le protocole samba s&#233;lectionner Autre  puis le protocole smb<br><br> - Pour une machine Windows en utilisant rsyncd, s&#233;lectionner Autre puis le protocole rsyncd. Cela n&#233;cessite d\'installer rsyncd sur la machine windows &#224; sauvegarder.<br><br>En fonction du choix que vous faites, des configurations vous seront propos&#233;es. Il vous est toujours possible de faire un autre choix en s&#233;lectionnant Autre.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
 	}     
 
   
@@ -136,30 +137,35 @@ if (is_admin("system_is_admin",$login)=="Y") {
 	                $Share="'BCDI'";
 			$dhcp="1";
 		}
-		// Si la machine est local et de type Se3 on propose tar
+		// Si la machine est local et de type Se3 on propose rsyncd
 		if ($TypeServer=="Local") { 
 			$dhcp = "0";
-			$XferMethod = "tar";
+			$XferMethod = "rsyncd";
 			$Model = "Se3";
 			$HostServer="localhost";
+            $BackupFilesExclude = "";
+            $Share="/var/se3;/home;/etc";
+            // On teste si /etc/rsyncd.conf existe
+            if(rsyncd_conf_ok()) { 
+                // on va lire le contenu
+                $Compte=variable("auth users");
+                $PassWord=rsyncd_pass();
+//            } else {
+                // Si il n'existe pas on le cree par defaut
+                             
+            }
 		}
 		if ($TypeServer=="Lcs") {
-			$XferMethod = "rsync";
-			$Share="'/'";
+			$XferMethod = "rsyncd";
+			$Share="root";
 			$BackupFilesExclude = "'/var/spool/squid','/var/mail','/var/spool/mail','/tmp','/var/cache/apt/archives','/proc','/mnt','/var/lib/backuppc','/usr/share/doc'";
 		}
 		if ($TypeServer=="Se3") {
 			$XferMethod = "rsyncd";
 			$BackupFilesExclude = "";
-			$Share="'var','home','etc'";
+			$Share="varse3;home;etc";
 		}
 	
-		if ($TypeServer=="Slis") {
-			$XferMethod = "rsync";
-			$BackupFilesExclude = "";
-			$Share="";
-		}
-
 		if ($TypeServer=="Autre") {
 			$XferMethod = "";
 			$BackupFilesExclude = "";
@@ -215,21 +221,13 @@ if (is_admin("system_is_admin",$login)=="Y") {
   			echo "<td> rsyncd</td></tr>"; 
    			echo "<input type=\"hidden\" name=\"XferMethod\" value=\"rsyncd\" />";
 		}
-  		elseif ($TypeServer == "Se3") { 
+  		elseif (($TypeServer == "Se3") || ($TypeServer == "Lcs")) { 
   			echo "<td> rsyncd</td></tr>"; 
    			echo "<input type=\"hidden\" name=\"XferMethod\" value=\"rsyncd\" />";
 		}
-  		elseif ($TypeServer == "Lcs") { 
-  			echo "<td> rsync</td></tr>"; 
-   			echo "<input type=\"hidden\" name=\"XferMethod\" value=\"rsync\" />";
-		}
   		elseif ($TypeServer == "Local") { 
-  			echo "<td> tar</td></tr>"; 
-   			echo "<input type=\"hidden\" name=\"XferMethod\" value=\"tar\" />";
-		}
-  		elseif ($TypeServer == "Slis") {
-  			echo "<td> rsync</td></tr>"; 
-   			echo "<input type=\"hidden\" name=\"XferMethod\" value=\"rsync\" />";
+  			echo "<td> rsyncd</td></tr>"; 
+   			echo "<input type=\"hidden\" name=\"XferMethod\" value=\"rsyncd\" />";
 		}
   		else {
       			echo "<td><select name=\"XferMethod\" ONCHANGE=\"this.form.submit();\">
@@ -239,11 +237,9 @@ if (is_admin("system_is_admin",$login)=="Y") {
   		   	echo ">smb</option><option";
   			if ($XferMethod=="rsync") { echo " selected"; }
         		echo ">rsync</option><option";
-  			if ($XferMethod=="tar") { echo " selected"; }
-        		echo ">tar</option><option";
   			if ($XferMethod=="rsyncd") { echo " selected"; }
             		echo ">rsyncd</option></select>\n";
-  			echo "&nbsp;<u onmouseover=\"return escape".gettext("('S&#233;lectionner le type de protocole &#224; utiliser pour faire les sauvegardes.<br><br> - smb : &#224; utiliser pour sauvegarder les machines windows. Vous devez fournir un compte et un mot de passe pour se connecter. Il faut donner les droits n&#233;cessaires afin de pouvoir faire les sauvegardes.<br><br> - rsync : est utilis&#233; pour faire une sauvegarde sur une machine distante, via un tunnel crypt&#233; SSH. Vous devez fournir la cl&#233; que vous avez g&#233;n&#233;r&#233; sur le serveur de sauvegarde &#224; la machine &#224; sauvegarder afin de pouvoir vous y connecter. Voir la documentation.<br><br> - tar : disponible que si vous sauvegardez le serveur de sauvegarde lui m&#234;me.<br><br> - rsyncd : Vous devez mettre en place rsyncd sur la machine que vous souhaitez sauvegarder. Vous devrez indiquer le compte plus mot de passe. rsyncd peut aussi &#234;tre utilis&#233;, pour sauvegarder des machines Windows. Voir la documentation.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>";
+  			echo "&nbsp;<u onmouseover=\"return escape".gettext("('S&#233;lectionner le type de protocole &#224; utiliser pour faire les sauvegardes.<br><br> - smb : &#224; utiliser pour sauvegarder les machines windows. Vous devez fournir un compte et un mot de passe pour se connecter. Il faut donner les droits n&#233;cessaires afin de pouvoir faire les sauvegardes.<br><br> - rsync : est utilis&#233; pour faire une sauvegarde sur une machine distante, via un tunnel crypt&#233; SSH. Vous devez fournir la cl&#233; que vous avez g&#233;n&#233;r&#233; sur le serveur de sauvegarde &#224; la machine &#224; sauvegarder afin de pouvoir vous y connecter. Voir la documentation.<br><br> - tar :  disponible que si vous sauvegardez le serveur de sauvegarde lui m&#234;me. Cette m&#233;thode n'est plus conseill&#233;e. Remplac&#233;e par rsyncd.<br><br> - rsyncd : Vous devez mettre en place rsyncd sur la machine que vous souhaitez sauvegarder. Vous devrez indiquer le compte plus mot de passe. rsyncd peut aussi &#234;tre utilis&#233;, pour sauvegarder des machines Windows. Voir la documentation.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>";
   		}
 
    		if(($XferMethod=="smb") or ($XferMethod=="rsyncd")) {
@@ -304,12 +300,12 @@ if (is_admin("system_is_admin",$login)=="Y") {
   		}
 
   		if($TypeServer!="") {
-       			if($XferMethod!="rsyncd") {
+       		if(($XferMethod!="rsyncd") or ($TypeServer == "Local")) {
 				echo "<tr><td width=\"40%\">".gettext(" R&#233;pertoires &#224; sauvegarder :")."</td>";
 			} else {
 				echo "<tr><td width=\"40%\">".gettext("Modules &#224; sauvegarder :")."</td>";
 			}	
-        	 	echo "<td><input type=\"text\" name=\"Share\" value=\"$Share\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer les r&#233;pertoires &#224; sauvegarder. Vous devez mettre des \' et des virgules entre chaque r&#233;pertoire.<br>Par exemple \'/home\',\'/var/se3\'<br><br> - Si la m&#233;thode de sauvegarde est rsyncd, vous devez indiquer le nom des modules, pas les r&#233;pertoires. Exemple \'module1\',\'module2\'. Les r&#233;pertoires &#224; sauvegarder sont &#224; indiquer dans le fichier rsyncd.conf se trouvant sur la machine &#224; sauvegarder.<br><br> - Pour les machines Windows indiquer \'C:\BCDI\'. Les fichiers syst&#232;mes en utilisation, ne peuvent pas &#234;tre sauvegard&#233;s.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
+        	 	echo "<td><input type=\"text\" name=\"Share\" value=\"$Share\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer les r&#233;pertoires &#224; sauvegarder. Vous devez mettre des <b>;</b> entre chaque r&#233;pertoire.<br>Par exemple /home;/var/se3;/etc<br><br> - Si la m&#233;thode de sauvegarde est rsyncd, vous devez indiquer le nom des modules, pas les r&#233;pertoires. Exemple module1;module2. Les r&#233;pertoires &#224; sauvegarder sont &#224; indiquer dans le fichier rsyncd.conf se trouvant sur la machine &#224; sauvegarder.<br><br> - Pour les machines Windows indiquer C:\\\BCDI;D:\\\mon_repertoire. Les fichiers syst&#232;mes en utilisation, ne peuvent pas &#234;tre sauvegard&#233;s.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
         		echo "<tr><td width=\"40%\">".gettext(" Exclusions :")."</td>";
 			echo "<td><input type=\"text\" name=\"BackupFilesExclude\" value=\"$BackupFilesExclude\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer ici les exclusions. Celle-ci se font par rapport aux r&#233;pertoires &#224; sauvegarder.<br><br>Par exemple, si vous avez d&#233;cid&#233; de sauvegarder le r&#233;pertoire /home et que vous ne souhaitez pas sauvegarder le sous r&#233;pertoire ssh indiquer ici \'ssh\' sans indiquer le r&#233;pertoire parent.<br><br>Pour les machines Windows, si vous avez indiqu&#233; C$ et que vous ne souhaitez pas sauvegarder le r&#233;pertoire windows, indiquer ce r&#233;pertoire dans cet espace.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
   		}
@@ -320,7 +316,8 @@ if (is_admin("system_is_admin",$login)=="Y") {
   		echo "<table align=center width=\"70%\" border=1 cellspacing=\"0\" cellpadding=\"0\">";
   		echo "<tr><td colspan=\"2\" class='menuheader' height=\"30\" align=\"center\">".gettext("Configuration par d&#233;faut")."</td></tr>\n";
   		echo "<tr><td>".gettext("Souhaitez vous utiliser <br>la configuration par d&#233;faut ?")." </td>\n";
-  		echo "<td align=\"center\">".gettext(" Oui : ")."<input type=radio name=\"defo\" value=\"Y\"";
+  		if ($defo=="") { $defo="Y"; }
+                echo "<td align=\"center\">".gettext(" Oui : ")."<input type=radio name=\"defo\" value=\"Y\"";
   		if ($defo=="Y") { echo " checked"; }
   		echo ">".gettext(" Non :")."<input type=radio name=\"defo\" value=\"N\"";
   		if ($defo=="N") { echo " checked"; }

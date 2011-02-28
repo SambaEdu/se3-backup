@@ -3,8 +3,8 @@
 
    /**
    
-   * Permet configurer la sauvegarde (Backuppc)
-   * @Version $Id: sauv.php 3296 2008-10-16 16:30:08Z wawa $ 
+   * Change l'uidnumber de backuppc (Backuppc)
+   * @Version $Id$ 
    
    * @Projet LCS / SambaEdu 
    
@@ -13,14 +13,13 @@
    * @Licence Distribue selon les termes de la licence GPL
    
    * @note 
-   * @sudo /usr/share/se3/sbin/testbackup.sh
-
+ 
    */
 
    /**
 
    * @Repertoire: sauvegarde
-   * file: sav.php
+   * file: valid_uidnumber.php
 
   */	
 

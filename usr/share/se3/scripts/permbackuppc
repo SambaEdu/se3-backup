@@ -1,5 +1,5 @@
 #!/bin/bash
-## $Id: droit_backuppc.sh 5443 2010-04-25 23:41:01Z keyser $ ##
+## $Id$ ##
 #
 ##### Permet de positionner les droits pour backuppc #####
 #
@@ -11,13 +11,16 @@ then
 	echo "Usage : pas d'option"
 	exit
 fi	
-
+[ "$1" = "--full" -o "$1" = "-f" ] && option="-R"
 bck_user="backuppc"
-test -e /var/run/backuppc/BackupPC.pid && bpc_etat="1"
 
-[ ! -z "$bpc_etat" ] &&  invoke-rc.d backuppc stop
-sed "s/www-se3/backuppc/" -i /etc/init.d/backuppc
-[ -e /etc/backuppc/config.pl ] &&  sed "s/www-se3/backuppc/g" -i /etc/backuppc/config.pl
+if [ -e /var/run/backuppc/BackupPC.pid ]; then
+	invoke-rc.d backuppc stop
+	bpc_etat="1"
+fi
+
+#sed "s/www-se3/backuppc/" -i /etc/init.d/backuppc
+#[ -e /etc/backuppc/config.pl ] &&  sed "s/www-se3/backuppc/g" -i /etc/backuppc/config.pl
 
 
 chown -R www-se3.backuppc /usr/share/backuppc
@@ -33,6 +36,13 @@ repsauve=$(readlink /var/lib/backuppc)
 else
 repsauve="/var/lib/backuppc"
 fi
-getfacl $repsauve 2>/dev/null|grep owner|grep $bck_user||chown -R $bck_user $repsauve
-[ "$bpc_etat" == "1" ] &&  invoke-rc.d backuppc start
+getfacl $repsauve 2>/dev/null|grep owner|grep $bck_user||chown $option $bck_user $repsauve
+if [ "$option" != "-R" ]; then
+	  chown backuppc:backuppc /var/lib/backuppc/pc
+	  chown backuppc:backuppc /var/lib/backuppc/cpool 
+fi
 
+if [ "$bpc_etat" == "1" ]; then
+	invoke-rc.d backuppc start
+fi
+exit 0

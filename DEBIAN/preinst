@@ -1,4 +1,32 @@
 #! /bin/sh
+if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /etc/backuppc/config.pl)" ]; then
+dpkg-divert --package se3 --remove --rename /etc/backuppc/config.pl 
+fi 
 
+if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /etc/backuppc/localhost.pl)" ]; then
+dpkg-divert --package se3 --remove --rename /etc/backuppc/localhost.pl 
+fi 
 
+if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /etc/backuppc/apache.conf)" ]; then
+dpkg-divert --package se3 --remove --rename /etc/backuppc/apache.conf
+fi 
+
+if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /usr/share/backuppc/image/BackupPC_stnd.css)" ]; then
+dpkg-divert --package se3 --remove --rename /usr/share/backuppc/image/BackupPC_stnd.css 
+fi 
+
+if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm)" ]; then
+rm -f /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm.divert 
+dpkg-divert --package se3 --remove --rename /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm
+fi 
+
+if [ -e /usr/share/se3/sbin/permbackuppc ]; then
+rm -f /usr/share/se3/sbin/permbackuppc
+fi
+
+#dpkg-divert --package se3-backup --add --divert /etc/backuppc/config.pl.divert /etc/backuppc/config.pl 
+
+dpkg-divert --package se3-backup --add --rename --divert /usr/share/backuppc/image/BackupPC_stnd.css.divert /usr/share/backuppc/image/BackupPC_stnd.css 
+#dpkg-divert --package se3-backup --add --rename --divert /etc/backuppc/apache.conf.divert /etc/backuppc/apache.conf 
+dpkg-divert --package se3-backup --add --rename --divert /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm.divert /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm 
 exit 0

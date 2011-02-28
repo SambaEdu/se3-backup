@@ -3,9 +3,7 @@ Version: #VERSION#
 Section: contrib
 Priority: optional
 Architecture: all
-Conflicts: 
-Replaces: 
-Depends: backuppc, rsync
+Depends: backuppc, rsync, se3 (>= 2.1.5821)
 Installed-Size: 1024
 Maintainer: Plouf<plouf@sambaedu.org>
 Description: Scripts d'installation de backuppc pour SambaEdu

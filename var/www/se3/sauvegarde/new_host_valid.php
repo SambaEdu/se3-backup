@@ -27,6 +27,8 @@
 
 include ("fonction_backup.inc.php");
 require ("config.inc.php");
+include ("fonctions_rsyncdconf.inc.php");
+
 $HostServer = $_GET['HostServer'];
 $TypeServer = $_GET['TypeServer'];
 $XferMethod = $_GET['XferMethod'];
@@ -80,8 +82,13 @@ $HOSTFILE .= "
 ";
 }
 elseif ($XferMethod=="smb") {
+$Share_corrige = preg_replace("/;/","','",$Share);
+$Share_corrige = str_replace("/","",$Share_corrige);
+$Share_corrige = "'".$Share_corrige."'";
 $HOSTFILE .= "
-\$Conf{SmbShareName} = [$Share];
+# Ne pas supprimer la ligne qui suit, utilisee par se3
+# \$Conf{Repertoire} = $Share;
+\$Conf{SmbShareName} = [$Share_corrige];
 \$Conf{SmbShareUserName} = '$Compte';
 \$Conf{SmbSharePasswd} = '$PassWord';
 \$Conf{SmbClientPath} = '/usr/bin/smbclient';
@@ -96,46 +103,17 @@ $HOSTFILE .= "
             . ' -c tarmode\\ full -Tx -';
 \$Conf{BackupFilesExclude} = [$BackupFilesExclude];
 ";
-} elseif($XferMethod=="tar") {
-$HOSTFILE .= "
-\$Conf{TarShareName} = [$Share];
-";
-if ($HostServer=="localhost") {
-$HOSTFILE .= "
-\$Conf{TarClientCmd} = '/usr/bin/sudo /usr/share/se3/scripts/tarCreate -v -f - -C \$shareName+ --totals';
-";
-} else {
-$HOSTFILE .= "
-\$Conf{TarClientCmd} = '\$sshPath -q -x -n -l root \$host'
-                    . ' /usr/bin/env LC_ALL=C \$tarPath -c -v -f - -C \$shareName+'
-                    . ' --totals';
-";
-}
-$HOSTFILE .= "
-\$Conf{TarFullArgs} = '\$fileList+';
-";
-
-if ($HostServer=="localhost") {
-$HOSTFILE .= "\$Conf{TarIncrArgs} = '--newer=\$incrDate \$fileList+';
-";
-} else {
-$HOSTFILE .= "\$Conf{TarIncrArgs} = '--newer=\$incrDate+ \$fileList+';
-";
-}
-
-$HOSTFILE .= "
-\$Conf{TarClientRestoreCmd} = '\$sshPath -q -x -l root \$host'
-		   . ' /usr/bin/env LC_ALL=C \$tarPath -x -p --numeric-owner --same-owner'
-		   . ' -v -f - -C \$shareName+';
-\$Conf{TarClientPath} = '/bin/tar';
-\$Conf{BackupFilesExclude} = [$BackupFilesExclude];
-";
 } elseif(($XferMethod=="rsync") or ($XferMethod=="rsyncd")) {
+$Share_corrige = preg_replace("/;/","','",$Share);
+$Share_corrige = str_replace("/","",$Share_corrige);
+$Share_corrige = "'".$Share_corrige."'";
 $HOSTFILE .= "
 \$Conf{RsyncClientPath} = '/usr/bin/rsync';
 \$Conf{RsyncClientCmd} = '\$sshPath -q -x -l root \$host \$rsyncPath \$argList+';
 \$Conf{RsyncClientRestoreCmd} = '\$sshPath -q -x -l root \$host \$rsyncPath \$argList+';
-\$Conf{RsyncShareName} = [$Share];
+# Ne pas supprimer la ligne qui suit, utilisee par se3
+# \$Conf{Repertoire} = $Share;
+\$Conf{RsyncShareName} = [$Share_corrige];
 \$Conf{RsyncdClientPort} = 873;
 \$Conf{RsyncdUserName} = '$Compte';
 \$Conf{RsyncdPasswd} = '$PassWord';
@@ -226,14 +204,58 @@ $HOSTFILE .= "
 fwrite($fp,$HOSTFILE);
 fclose($fp);
 
-/* Code invalide, pas les droits de faire cela: A SUPPRIMER SI PAS MIEUX
-chmod($fichier,0775);
-chown($fichier,"backuppc");
-chgrp($fichier,"www-data");
-*/
+// On cree le fichier /etc/rsyncd.conf
+if (($XferMethod=="rsyncd") && ($TypeServer=="Local")) {
+        // On stoppe rsync
+        exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh stop");
+        $hostsAllow=variable("hosts allow");
+        if ($hostsAllow=="") {
+            $hostsAllow="127.0.0.1";
+        }
+        $readOnly=variable("read only");
+        if ($readOnly=="") {
+            $readOnly="no";
+        }
+        $fichier = "/tmp/rsyncd.conf";
+        $fp=fopen("$fichier","w+");
+        $DEFAUT = "
+uid=root
+gid=root
+use chroot=no
+syslog facility=local5
+pid file=/var/run/rsyncd.pid
+auth users=".$Compte."
+secrets file=/etc/rsyncd.secret
+hosts allow=$hostsAllow
+read only=$readOnly";
+
+
+        // Creation des modules a partir des repertoires a sauvegarder
+        $modules = preg_split("/;/",$Share,-1);
+        for ($i=0; $i < count($modules); $i++) {
+            $rep_module = "$modules[$i]";
+            $nom_module = str_replace("/","",$modules[$i]);
+            $DEFAUT .= "
+
+## $nom_module ; $rep_module 
+[$nom_module]
+    comment = repertoire $rep_module
+    path = $rep_module";
+
+        }
+
+        fwrite($fp,$DEFAUT);
+        fclose($fp);
+
+
+        // On lance le script de conf
+        exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start $Compte $PassWord");
+
+}    
+
 /**********************************Creation des fichiers de sauvegarde ***********************/
 
-if (($HostServer == "localhost") and ($XferMethod == "tar")) {
+if ($HostServer == "localhost") {
     $sql="Delete from params where name='mysql_all_save';";
    	mysql_query($sql);
    	$sql="Insert into params values ('', 'mysql_all_save', '".$MysqlName."', '5', '0', 'Sauvegarde de l ensemble des base SQL pour localhost');";

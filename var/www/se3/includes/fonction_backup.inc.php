@@ -301,9 +301,9 @@ function DeleteRep($HostServer) { // Detruit le repertoire de la sauvegarde de l
 	}
 	$rep = $dir_backup.$HostServer;
 	if(is_dir($rep)) {
-		passthru("rm -Rf $rep",$retourn);
-		return $retourn;	
-	}
+            $cmd="/usr/bin/sudo /usr/share/se3/scripts/move_rep_backuppc.sh delete ".$HostServer;
+            exec($cmd);
+         }
 }	
 
 //=================================================

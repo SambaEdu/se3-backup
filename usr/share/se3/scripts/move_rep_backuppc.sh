@@ -1,12 +1,18 @@
 #!/bin/sh
 #
-# $Id: move_rep_backuppc.sh 4428 2009-09-19 15:32:26Z gnumdk $ #
+# $Id$ #
 #
+
+#
+# Deplace le repertoire /var/lib/backuppc vers un autre disque, en creant un lien symbolique
+# Supprime completement une sauvegarde en fonction du nom de la machine
+#
+
 
 if [ -f /tmp/move_backuppc.lock ]
 then
-	echo "Lock trouvé"
-	logger -t "BackupPc" "Lock trouvé..."
+	echo "Lock trouvï¿½"
+	logger -t "BackupPc" "Lock trouvï¿½..."
 else 
 
   if [ "$1" = "" -o "$2" = "" ]
@@ -16,10 +22,16 @@ else
 	exit;
   fi
   
+  if [ "$1" = "delete" -a "$2" != "" ]
+  then
+    rm -Rf /var/lib/backuppc/pc/$2
+    exit
+  fi
+
   # On place un lock
   touch /tmp/move_backuppc.lock
 
-  # On copie le répertoire backuppc vers la nouvelle destination
+  # On copie le rï¿½pertoire backuppc vers la nouvelle destination
   # Cas ou on essaye de revenir dans /var/lib
   if [ "$2" = "/var/lib/backuppc" ]
   then
@@ -29,9 +41,9 @@ else
 	fi
   fi	
   mv $1 $2
-  logger -t "BackupPc" "Repertoire déplacé de $1 vers $2"
+  logger -t "BackupPc" "Repertoire dï¿½placï¿½ de $1 vers $2"
   
-  # On recrée le lien symb de /var/lib/backuppc
+  # On recrï¿½e le lien symb de /var/lib/backuppc
   if [ "$?" = "0" ]
   then
 	if [ -L "/var/lib/backuppc" -o ! -d "/var/lib/backuppc" ]

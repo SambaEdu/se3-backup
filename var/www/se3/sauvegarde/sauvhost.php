@@ -106,7 +106,13 @@ if($_GET['action']=="del2") {
 			echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=sauv.php\">";
 			exit;
 		}	
-  	}
+
+                if (($HostServer=="localhost") or ($HostServer=="127.0.0.1")) {
+                    exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh stop");
+                }
+
+        }
+
   
   	if($_GET['supp']=="0") { // On d&#233;sactive
 		Desactive($HostServer,-1);

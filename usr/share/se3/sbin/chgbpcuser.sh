@@ -4,7 +4,7 @@
 #
 # Auteur: wawa - modifs keyser 22/01/10
 #
-## $Id: chgbpcuser.sh 5341 2010-03-17 16:48:16Z dbo $ ##
+## $Id$ ##
 #
 # /usr/share/se3/sbin/chgpbcuser.sh
 
