@@ -1,0 +1,2 @@
+# On teste si NAS ou DD ok
+00 7-19/2  * * *   root    /usr/share/se3/sbin/testbackup.sh cron
