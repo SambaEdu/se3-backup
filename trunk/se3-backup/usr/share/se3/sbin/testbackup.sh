@@ -3,6 +3,7 @@
 #
 ## $Id$ ##
 #
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
