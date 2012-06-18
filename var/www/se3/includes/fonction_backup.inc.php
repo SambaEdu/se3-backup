@@ -10,6 +10,7 @@
    * @Auteurs Philippe Chadefaux
    
    * @Note: Ce fichier de fonction doit etre appele par un include
+    * 
 
    * @Licence Distribue sous la licence GPL
    */
