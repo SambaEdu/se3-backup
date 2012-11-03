@@ -38,7 +38,7 @@ function variable ($Name) { // retourne la valeur de Name
 	if (file_exists("/etc/rsyncd.conf")) {
 		$lignes = file("/etc/rsyncd.conf");
 		foreach ($lignes as $num => $ligne) {
-			if (ereg ("$Name=(.*)",$ligne,$reg)) {
+			if (preg_match ("/$Name=(.*)/",$ligne,$reg)) {
 				$var = trim($reg[1]);
 				return $var;
 			}
