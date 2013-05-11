@@ -93,13 +93,13 @@ $HOSTFILE .= "
 \$Conf{SmbSharePasswd} = '$PassWord';
 \$Conf{SmbClientPath} = '/usr/bin/smbclient';
 \$Conf{SmbClientFullCmd} = '\$smbClientPath \\\\\\\\\$host\\\\\$shareName'
-	    . ' \$I_option -U \$userName -E -N -d 1'
+	    . ' \$I_option -U \$userName -E -d 1'
             . ' -c tarmode\\ full -Tc\$X_option - \$fileList';
 \$Conf{SmbClientIncrCmd} = '\$smbClientPath \\\\\\\\\$host\\\\\$shareName'
-	    . ' \$I_option -U \$userName -E -N -d 1'
+	    . ' \$I_option -U \$userName -E -d 1'
 	    . ' -c tarmode\\ full -TcN\$X_option \$timeStampFile - \$fileList';
 \$Conf{SmbClientRestoreCmd} = '\$smbClientPath \\\\\\\$host\\\\\$shareName'
-            . ' \$I_option -U \$userName -E -N -d 1'
+            . ' \$I_option -U \$userName -E -d 1'
             . ' -c tarmode\\ full -Tx -';
 \$Conf{BackupFilesExclude} = [$BackupFilesExclude];
 ";
