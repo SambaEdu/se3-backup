@@ -10,7 +10,8 @@
 
 
 #init param bdd partie sauvegarde #
-. /usr/share/se3/includes/config.inc.sh -b 
+. /etc/se3/config_b.cache.sh 
+# . /usr/share/se3/includes/config.inc.sh -b 
 . /usr/share/se3/includes/functions.inc.sh
 
 cur_user=`grep "USER=" /etc/init.d/backuppc |cut -d= -f2`
@@ -61,4 +62,4 @@ if [ "$bck_user" != "$cur_user" ]; then
 fi
 
 # Mise en place des droits
-/usr/share/se3/sbin/droit_backuppc.sh
+/usr/share/se3/scripts/permbackuppc
