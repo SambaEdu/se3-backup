@@ -36,7 +36,11 @@ repsauve=$(readlink /var/lib/backuppc)
 else
 repsauve="/var/lib/backuppc"
 fi
-getfacl $repsauve 2>/dev/null|grep owner|grep $bck_user||chown $option $bck_user $repsauve
+
+[ "$(stat $repsauve -c %U)" != "$bck_user" ] && chown $option $bck_user $repsauve
+
+
+# getfacl $repsauve 2>/dev/null|grep owner|grep $bck_user||chown $option $bck_user $repsauve
 if [ "$option" != "-R" ]; then
 	  chown backuppc:backuppc /var/lib/backuppc/pc
 	  chown backuppc:backuppc /var/lib/backuppc/cpool 
