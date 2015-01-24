@@ -13,7 +13,8 @@ then
 fi
 
 #init params bdd
-. /usr/share/se3/includes/config.inc.sh -b
+. /etc/se3/config_b.cache.sh 
+# /usr/share/se3/includes/config.inc.sh -b
 
 if [ "$bpcmedia" = "1" ]; then
 ##### Teste si le disque USB est monte #####
@@ -56,15 +57,20 @@ if [ "$1" = "cron" ]; then
 			[ -h "$CHEMIN_SAV" ] && CHEMIN_SAV=$(readlink -e /var/lib/backuppc)
 			df |grep "$CHEMIN_SAV" >/dev/null || MBPC=0
 			if [ "$MBPC" = "0" ]; then
-				echo "Aucune paritition montee sur $CHEMIN_SAV"
+				echo "Aucune partition montee sur $CHEMIN_SAV"
 				EXIT1=1
 				
 			fi
 	fi
 	else
 		if [ $backuppc = "1" ]; then
-			echo "Attention, le module sauvegarde est actif mais le service backuppc est off"
-			exit 1
+			if [ ! -e /tmp/alerte-backuppc ]; then
+				echo "Attention, le module sauvegarde est actif mais le service backuppc est off"
+				touch /tmp/alerte-backuppc
+				exit 1
+			else
+				/usr/bin/find /tmp/ -maxdepth 1 -type f -name "alerte-backuppc" -ctime +1 -delete 
+			fi
 		fi	
 	exit 0
 	fi
