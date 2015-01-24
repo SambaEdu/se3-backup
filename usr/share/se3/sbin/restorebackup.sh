@@ -7,36 +7,39 @@
 
 
 # Verifie le point de montage du peripherique de backup
-# BPCMEDIA=1 --> disque USB
-# BPCMEDIA=2 --> disque dur
-# BPCMEDIA=3 --> NAS
+# bpcmedia=1 --> disque USB
+# bpcmedia=2 --> disque dur
+# bpcmedia=3 --> NAS
+. /etc/se3/config_b.cache.sh 
+
+
 
 if [ -e "/etc/backuppc/restore.lck" ]; then
 	exit 0
 fi
 
 ps auxw | grep fsck | grep -v grep && exit 0;
+# 
+# if [ -e /var/www/se3/includes/config.inc.php ]
+# then
+#         dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
+#         dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
+#         dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
+#         dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
+# else
+#         echo "impossible d'acceder aux params mysql"
+#         exit 1
+# fi
 
-if [ -e /var/www/se3/includes/config.inc.php ]
-then
-        dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
-else
-        echo "impossible d'acceder aux params mysql"
-        exit 1
-fi
-
-BPCMEDIA=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bpcmedia'"`
-bck_user=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bck_user'"`
-USBDISK=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='usbdisk'"`
-USBDEV=/dev/disk/by-id/$USBDISK
+# bpcmedia=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bpcmedia'"`
+# bck_user=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bck_user'"`
+# usbdisk=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='usbdisk'"`
+USBDEV=/dev/disk/by-id/$usbdisk
 #
 # Disque USB
 #
 
-if [ "$BPCMEDIA" = "1" ]; then
+if [ "$bpcmedia" = "1" ]; then
 
 mount |grep "\/var\/lib\/backuppc" >/dev/null || MBPC=0
 if [ "$MBPC" = "0" ]; then
@@ -91,18 +94,18 @@ fi
 # NAS
 #
 
-if [ "$BPCMEDIA" = "3" ]; then
+if [ "$bpcmedia" = "3" ]; then
 mount |grep "\/var\/lib\/backuppc" >/dev/null || MBPC=0
 if [ "$MBPC" = "0" ]; then
 	echo "NAS non mont&#233;."
 	# Recuperation des parametres
-	NAS_protocol=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_protocol'"`
-	NAS_ip=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_ip'"`
-	NAS_share=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_share'"`
-	NAS_login=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_login'"`
-	NAS_pass=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_pass'"`
-	NAS_mntsuffix=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_mntsuffix'"`
-	BPCUIDN=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bck_uidnumber'"`
+# 	NAS_protocol=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_protocol'"`
+# 	NAS_ip=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_ip'"`
+# 	NAS_share=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_share'"`
+# 	NAS_login=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_login'"`
+# 	NAS_pass=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_pass'"`
+# 	NAS_mntsuffix=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_mntsuffix'"`
+# 	BPCUIDN=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bck_uidnumber'"`
 	# BPCUIDN=`getent passwd www-se3| cut -d : -f3`
 
 	if [ ! -d /var/lib/backuppc/$NAS_mntsuffix ]; then
@@ -151,6 +154,6 @@ fi
 # Demarrage de backuppc
 #
 /etc/init.d/backuppc restart || (
-    /usr/share/se3/sbin/droit_backuppc.sh
+    /usr/share/se3/sbin/permbackuppc
     /etc/init.d/backuppc start
 )
