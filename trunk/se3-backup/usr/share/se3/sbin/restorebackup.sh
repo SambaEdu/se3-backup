@@ -10,7 +10,7 @@
 # bpcmedia=1 --> disque USB
 # bpcmedia=2 --> disque dur
 # bpcmedia=3 --> NAS
-. /etc/se3/config_b.cache.sh 
+. /usr/share/se3/includes/config.inc.sh -b
 
 
 
