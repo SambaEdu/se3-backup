@@ -10,7 +10,7 @@
 
 
 #init param bdd partie sauvegarde #
-. /etc/se3/config_b.cache.sh 
+. /usr/share/se3/includes/config.inc.sh -b 
 # . /usr/share/se3/includes/config.inc.sh -b 
 . /usr/share/se3/includes/functions.inc.sh
 

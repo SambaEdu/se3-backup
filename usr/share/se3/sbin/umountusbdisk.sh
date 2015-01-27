@@ -13,22 +13,13 @@ then
 	exit
 fi
 
-if [ -e /var/www/se3/includes/config.inc.php ]
-then
-        dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
-else
-        echo "impossible d'acceder aux params mysql"
-        exit 1
-fi
+#init params bdd
+. /usr/share/se3/includes/config.inc.sh -b
 
-BPCMEDIA=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='bpcmedia'"`
-if [ "$BPCMEDIA" = "3" ]; then
-	mntsuffix=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_mntsuffix'"`
+if [ "$bpcmedia" = "3" ]; then
+	NAS_mntsuffix=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_NAS_mntsuffix'"`
 else
-	$mntsuffix=""
+	$NAS_mntsuffix=""
 fi
 
 echo "Deconnexion du disque de sauvegarde en cours..."
@@ -37,7 +28,7 @@ sleep 2
 ps auxw |grep backuppc | grep www-se3 >/dev/null && killall -9 "/usr/bin/perl"
 mount |grep "\/var\/lib\/backuppc" >/dev/null || MBPC=0
 if [ ! "$MBPC" = "0" ]; then
-	umount /var/lib/backuppc/$mntsuffix
+	umount /var/lib/backuppc/$NAS_mntsuffix
 fi
 mount |grep "\/var\/lib\/backuppc" >/dev/null && EXIT1=1
 if [ "$EXIT1" = 1 ]; then
