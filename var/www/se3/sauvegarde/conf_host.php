@@ -33,18 +33,26 @@ require_once("lang.inc.php");
 bindtextdomain('sauvegarde',"/var/www/se3/locale");
 textdomain ('sauvegarde');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+$Share=$purifier->purify($_GET[Share]);
+$BackupFilesExclude=$purifier->purify($_GET[BackupFilesExclude]);
+
 //aide
 $_SESSION["pageaide"]="Sauvegarde Backuppc";
 
 // Verifie les droits
 if (is_admin("system_is_admin",$login)=="Y") {
 
-$HostServer=$_GET[HostServer];
+$HostServer=$purifier->purify($_GET[HostServer]);
 
-if ($_GET[Share] != "") {
+if ($Share != "") {
         $Share = stripslashes($Share);
 }
-if ($_GET[BackupFilesExclude] != "") {
+if ($BackupFilesExclude != "") {
         $BackupFilesExclude = stripslashes($BackupFilesExclude);
 }
 		

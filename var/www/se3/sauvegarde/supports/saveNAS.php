@@ -34,6 +34,11 @@ require ("config.inc.php");
 	require_once("lang.inc.php");
 	bindtextdomain('sauvegarde',"/var/www/se3/locale");
 	textdomain ('sauvegarde');
+        
+        // HTMLpurifier
+        include("../se3/includes/library/HTMLPurifier.auto.php");
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
 
 
 	// Verifie les droits
@@ -41,7 +46,7 @@ require ("config.inc.php");
 	if (ldap_get_right("system_is_admin",$login)!="Y")
        	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 	
-	$NAS_mntsuffix = $_GET['NAS_mntsuffix'];
+	$NAS_mntsuffix = $purifier->purify($_GET['NAS_mntsuffix']);
 	
 	if ($NAS_mntsuffix == 'rien')
 		$NAS_mntsuffix ='';
@@ -64,7 +69,7 @@ require ("config.inc.php");
 	###################################################################################
 
 	
-	$NAS_protocol = $_GET['NAS_protocol'];
+	$NAS_protocol = $purifier->purify($_GET['NAS_protocol']);
 	
 	if ( ($NAS_protocol != 'cifs') && ($NAS_protocol != 'nfs') )
 		die("Il faut choisir cifs ou nfs comme protocole");
@@ -82,7 +87,7 @@ require ("config.inc.php");
 
 
 	###################################################################################
-	$NAS_ip = $_GET['NAS_ip'];
+	$NAS_ip = $purifier->purify($_GET['NAS_ip']);
 	$test = explode('.',$NAS_ip);
 	if  (count($test) != 4)
 		die("Votre adresse IP est invalide exemple: x.x.x.x !");
@@ -99,7 +104,7 @@ require ("config.inc.php");
 	}
 
 	###################################################################################
-	$NAS_share = $_GET['NAS_share'];
+	$NAS_share = $purifier->purify($_GET['NAS_share']);
 	if (trim($NAS_share) == '')
 		die("Le nom de partage est invalide!");
 	$sql= "SELECT * FROM `params` WHERE name = 'NAS_share';";
@@ -120,7 +125,7 @@ require ("config.inc.php");
 		$NAS_login = '';
 	} 
 	else
-		$NAS_login = $_GET['NAS_login'];
+		$NAS_login = $purifier->purify($_GET['NAS_login']);
 	
 
 	$sql= "SELECT * FROM `params` WHERE name = 'NAS_login';";
@@ -141,7 +146,7 @@ require ("config.inc.php");
 		$NAS_pass = '';
 	} 
 	else
-		$NAS_pass = $_GET['NAS_pass'];
+		$NAS_pass = $purifier->purify($_GET['NAS_pass']);
 	
 
 	$sql= "SELECT * FROM `params` WHERE name = 'NAS_pass';";

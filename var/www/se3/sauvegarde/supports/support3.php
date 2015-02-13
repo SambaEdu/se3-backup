@@ -146,7 +146,7 @@
 		$choixSufX .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img onmouseover=\"Tip('Convient dans la plupart des cas.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
 		
 		$choixSufX .= "<BR /><input type=\"radio\" id=\"NAS_suf2\"name=\"NAS_mountsuffix\" value=\"pc\" $test2>/var/lib/backuppc/pc</input>";
-		$choixSufX .= "&nbsp;&nbsp; <img onmouseover=\"Tip('N�cessaire pour certains NAS.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
+		$choixSufX .= "&nbsp;&nbsp; <img onmouseover=\"Tip('N&eacute;cessaire pour certains NAS.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
 	
 
 		echo "<tr class=\"nas_config\"><td width=\"66%\">&nbsp;&nbsp;".gettext("Protocole:")."</td><td align=\"center\" >$choixProtocole</td></tr>";

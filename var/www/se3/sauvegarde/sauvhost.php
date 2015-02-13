@@ -33,13 +33,21 @@
    require_once("lang.inc.php");
    bindtextdomain('sauvegarde',"/var/www/se3/locale");
    textdomain ('sauvegarde');
+   
+   // HTMLpurifier
+    include("../se3/includes/library/HTMLPurifier.auto.php");
+    $config = HTMLPurifier_Config::createDefault();
+    $purifier = new HTMLPurifier($config);
+    
+    $action=$purifier->purify($_GET['action']);
+    $supp=$purifier->purify($_GET['supp']);
 
 
 // Verifie les droits
 if (is_admin("system_is_admin",$login)=="Y") {
 
-	$HostServer=$_GET['HostServer'];
-	$TypeServer=$_GET['TypeServer'];
+	$HostServer=$purifier->purify($_GET['HostServer']);
+	$TypeServer=$purifier->purify($_GET['TypeServer']);
 	
 	// verifie la coherence entre le fichier hosts et la presence du fichier machine.pl
 	HostCoherence();
@@ -49,7 +57,7 @@ if (is_admin("system_is_admin",$login)=="Y") {
 	echo "<br><br>";
 
 /************* Suppression ***************************************************/
-if ($_GET['action']=="del") {
+if ($action=="del") {
 	echo"<br><br>";
 	echo "<form method=\"get\" action=\"sauvhost.php\" >";
 	echo"<table align=center width=\"60%\" border=1 cellspacing=\"0\" cellpadding=\"0\">\n";
@@ -89,8 +97,8 @@ if ($_GET['action']=="del") {
 	exit;
 }
 
-if($_GET['action']=="del2") {
-	if($_GET['supp']=="1") { // On detruit tout
+if($action=="del2") {
+	if($supp=="1") { // On detruit tout
 		$rep = "/etc/backuppc/";
 		$file = $rep.$HostServer.".pl";
 		if (file_exists($file)) { // On d&#233;truit le fichier de conf de cette machine
@@ -114,13 +122,13 @@ if($_GET['action']=="del2") {
         }
 
   
-  	if($_GET['supp']=="0") { // On d&#233;sactive
+  	if($supp=="0") { // On d&#233;sactive
 		Desactive($HostServer,-1);
 		reloadBackuPpc();
 	}
 }	
 
-if ($_GET['action'] == "active") {
+if ($action == "active") {
 	Desactive($HostServer,"1");
 	reloadBackuPpc();
 }

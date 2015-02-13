@@ -26,25 +26,30 @@
 
 include ("fonction_backup.inc.php");
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
 	
 // if ((is_admin("system_is_admin",$login)=="Y") or (is_admin("inventaire_can_read",$login)=="Y")) {
-$HostServer = $_GET['HostServer'];
-$TypeServer = $_GET['TypeServer'];
-$XferMethod = $_GET['XferMethod'];
-$dhcp = $_GET['dhcp'];
-$Share = $_GET['Share'];
-$defo = $_GET['defo'];
-$Compte = $_GET['Compte'];
-$PassWord = $_GET['PassWord'];
-$AclName = $_GET['AclName'];
-$LdapName = $_GET['LdapName'];
-$MysqlName = $_GET['MysqlName'];
-$Secrets=$_GET['Secrets'];
-$BackupFilesExclude=$_GET['BackupFilesExclude'];
-$TypeServerOld=$_GET['TypeServerOld'];
-$err=$_GET['err'];
-$ArchiveDest=$_GET['ArchiveDest'];
-$ArchiveSplit=$_GET['ArchiveSplit'];		
+$HostServer = $purifier->purify($_GET['HostServer']);
+$TypeServer = $purifier->purify($_GET['TypeServer']);
+$XferMethod = $purifier->purify($_GET['XferMethod']);
+$dhcp = $purifier->purify($_GET['dhcp']);
+$Share = $purifier->purify($_GET['Share']);
+$defo = $purifier->purify($_GET['defo']);
+$Compte = $purifier->purify($_GET['Compte']);
+$PassWord = $purifier->purify($_GET['PassWord']);
+$AclName = $purifier->purify($_GET['AclName']);
+$LdapName = $purifier->purify($_GET['LdapName']);
+$MysqlName = $purifier->purify($_GET['MysqlName']);
+$Secrets = $purifier->purify($_GET['Secrets']);
+$BackupFilesExclude = $purifier->purify($_GET['BackupFilesExclude']);
+$TypeServerOld = $purifier->purify($_GET['TypeServerOld']);
+$err = $purifier->purify($_GET['err']);
+$ArchiveDest = $purifier->purify($_GET['ArchiveDest']);
+$ArchiveSplit = $purifier->purify($_GET['ArchiveSplit']);		
 
 if ($Share != "") {
 	$Share = stripslashes($Share);
@@ -187,7 +192,7 @@ if ($defo=="N") { // Dans le cas ou on veut faire une conf particuli&#233;re
 
   	require ("pdp.inc.php");
 
-} elseif ($_GET[defo] == "Y") {
+} elseif ($defo == "Y") {
 	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host_valid.php?HostServer=$HostServer&TypeServer=$TypeServer&XferMethod=$XferMethod&Share=$Share&defo=$defo&Compte=$Compte&PassWord=$PassWord&AclName=$AclName&LdapName=$LdapName&MysqlName=$MysqlName&Secrets=$Secrets&dhcp=$dhcp&BackupFilesExclude=$BackupFilesExclude\">";
 }
 
