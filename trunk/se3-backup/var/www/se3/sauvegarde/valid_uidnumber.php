@@ -34,6 +34,13 @@
    require_once("lang.inc.php");
    bindtextdomain('sauvegarde',"/var/www/se3/locale");
    textdomain ('sauvegarde');
+   
+   // HTMLpurifier
+    include("../se3/includes/library/HTMLPurifier.auto.php");
+    $config = HTMLPurifier_Config::createDefault();
+    $purifier = new HTMLPurifier($config);
+
+    $uidnum=$purifier->purify($_POST[uidnum]);
 
 
 ###############################################################################
@@ -51,7 +58,7 @@ $_SESSION["pageaide"]="Sauvegarde Backuppc";
 if ($_POST['uidnumber'] == '')
 	die('erreur');
 
-$uidnum = ':x:'.$_POST['uidnumber'].':';
+$uidnum = ':x:'.$uidnumber.':';
 $command = `getent passwd | grep $uidnum`;
 
 

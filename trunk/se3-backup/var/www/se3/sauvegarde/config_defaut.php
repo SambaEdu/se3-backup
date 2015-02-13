@@ -34,39 +34,44 @@ require_once("lang.inc.php");
 bindtextdomain('sauvegarde',"/var/www/se3/locale");
 textdomain ('sauvegarde');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
 //aide
 $_SESSION["pageaide"]="Sauvegarde Backuppc";
 
 // Verifie les droits
 if (is_admin("system_is_admin",$login)=="Y")  {
 
-
+$action = $purifier->purify($_GET['action']);
 
 /*************** Affiche la fin du traitement *************************/
-if($_GET['action']=="modif") {
+if($action=="modif") {
 
-	$WakeupSchedule=$_GET['WakeupSchedule'];
-	$FullPeriod=$_GET['FullPeriod'];
-	$IncrPeriod=$_GET['IncrPeriod'];
-	$FullKeepCnt=$_GET['FullKeepCnt'];
-	$FullKeepCntMin=$_GET['FullKeepCntMin'];
-	$IncrKeepCnt=$_GET['IncrKeepCnt'];
-	$IncrKeepCntMin=$_GET['IncrKeepCntMin'];
-	$FullAgeMax=$_GET['FullAgeMax'];
-	$IncrAgeMax=$_GET['IncrAgeMax'];
-	$hourBegin=$_GET['hourBegin'];
-	$hourEnd=$_GET['hourEnd'];
-	$ipAddrBase=$_GET['ipAddrBase'];
-	$first=$_GET['first'];
-	$last=$_GET['last'];
-	$EMailAdminUserName=$_GET['EMailAdminUserName'];
-	$Lundi=$_GET['Lundi'];
-	$Mardi=$_GET['Mardi'];
-	$Mercredi=$_GET['Mercredi'];
-	$Jeudi=$_GET['Jeudi'];
-	$Vendredi=$_GET['Vendredi'];
-	$Samedi=$_GET['Samedi'];
-	$Dimanche=$_GET['Dimanche'];
+	$WakeupSchedule=$purifier->purify($_GET['WakeupSchedule']);
+	$FullPeriod=$purifier->purify($_GET['FullPeriod']);
+	$IncrPeriod=$purifier->purify($_GET['IncrPeriod']);
+	$FullKeepCnt=$purifier->purify($_GET['FullKeepCnt']);
+	$FullKeepCntMin=$purifier->purify($_GET['FullKeepCntMin']);
+	$IncrKeepCnt=$purifier->purify($_GET['IncrKeepCnt']);
+	$IncrKeepCntMin=$purifier->purify($_GET['IncrKeepCntMin']);
+	$FullAgeMax=$purifier->purify($_GET['FullAgeMax']);
+	$IncrAgeMax=$purifier->purify($_GET['IncrAgeMax']);
+	$hourBegin=$purifier->purify($_GET['hourBegin']);
+	$hourEnd=$purifier->purify($_GET['hourEnd']);
+	$ipAddrBase=$purifier->purify($_GET['ipAddrBase']);
+	$first=$purifier->purify($_GET['first']);
+	$last=$purifier->purify($_GET['last']);
+	$EMailAdminUserName=$purifier->purify($_GET['EMailAdminUserName']);
+	$Lundi=$purifier->purify($_GET['Lundi']);
+	$Mardi=$purifier->purify($_GET['Mardi']);
+	$Mercredi=$purifier->purify($_GET['Mercredi']);
+	$Jeudi=$purifier->purify($_GET['Jeudi']);
+	$Vendredi=$purifier->purify($_GET['Vendredi']);
+	$Samedi=$purifier->purify($_GET['Samedi']);
+	$Dimanche=$purifier->purify($_GET['Dimanche']);
 	
 	// On v&#233;rifie que les variables sont remplies, sinon on met les valeurs par d&#233;faut
 	if ($WakeupSchedule == "") { $WakeupSchedule = "1..23"; }
@@ -402,7 +407,7 @@ echo "<P><h1>";
 echo gettext("Configuration par d&#233;faut de Backuppc");
 echo "</h1></P>";
 
-if ($_GET['action'] == "modif") {
+if ($action == "modif") {
 	if (EtatBackupPc() == "1") {
 		echo "<center><h3>";
 	  	echo gettext("Relecture du fichier de conf. Modifications prises en compte");

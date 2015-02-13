@@ -37,6 +37,12 @@
    require_once("lang.inc.php");
    bindtextdomain('sauvegarde',"/var/www/se3/locale");
    textdomain ('sauvegarde');
+   
+   // HTMLpurifier
+    include("../se3/includes/library/HTMLPurifier.auto.php");
+    $config = HTMLPurifier_Config::createDefault();
+    $purifier = new HTMLPurifier($config);
+
 
 
 ###############################################################################
@@ -332,34 +338,35 @@ if (ldap_get_right("system_is_admin",$login)!="Y")
 //aide 
 $_SESSION["pageaide"]="Sauvegarde Backuppc";
 
-$drive=$_GET['drive'];
-$space=$_GET['space'];
-$_SESSION['action'] = $_GET['action'];
-$bpcmediaNew=$_GET['bpcmediaNew'];
+$drive = $purifier->purify($_GET['drive']);
+$space = $purifier->purify($_GET['space']);
+$action = $purifier->purify($_GET['action']);
+$bpcmediaNew = $purifier->purify($_GET['bpcmediaNew']);
+$usbdisk = $purifier->purify($_GET['usbdisk']);
 					       
 /***************************************************************************************************/
-if (isset($_GET['usbdisk']) and ! isset ($_GET['action'])) {
+if (isset($usbdisk) and ! isset ($action)) {
 	$sql="Delete from params where name='usbdisk';";
 	mysql_query($sql);
-	$sql="Insert into params values ('', 'usbdisk', '".$_GET['usbdisk']."', '5', '0', 'Disque de sauvegarde');";
+	$sql="Insert into params values ('', 'usbdisk', '".$usbdisk."', '5', '0', 'Disque de sauvegarde');";
 	mysql_query($sql);
 	mysql_close();
-	system("sudo /usr/share/se3/scripts/udev_disk_rule.sh ".$_GET['usbdisk']);
+	system("sudo /usr/share/se3/scripts/udev_disk_rule.sh ".$usbdisk);
 	umountUSB ();
 }
 
-if ($_GET['action'] == "format") {
-	$return=system("sudo /usr/share/se3/scripts/format_disk.sh ".$_GET['usbdisk']);
+if ($action == "format") {
+	$return=system("sudo /usr/share/se3/scripts/format_disk.sh ".$usbdisk);
 	echo $return;
 }
 
-if ($_GET['action'] == "start") {
+if ($action == "start") {
 	if (file_exists("/etc/backuppc/restore.lck")) {
 	  unlink("/etc/backuppc/restore.lck");
 	}
 	startBackupPc();
 }
-if ($_GET['action'] == "stop") {
+if ($action == "stop") {
 	if (!file_exists("/etc/backuppc/restore.lck")) {
 	  touch("/etc/backuppc/restore.lck");
 	}
@@ -367,17 +374,17 @@ if ($_GET['action'] == "stop") {
 	
 }	
 	
-if ($_GET['action'] == "key") {
+if ($action == "key") {
 	CreeKey();
 }	
 
-if ($_GET['action'] == "modif") {
+if ($action == "modif") {
 	if ($drive!=$space) {
 		MoveRep($drive,$space);
 	}	
 }	
 
-if ($_GET[action] == "disk") {
+if ($action == "disk") {
 	if ($bpcmediaNew=="") { $bpcmediaNew="0"; }
 	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
 	@mysql_select_db($dbname) or die(gettext("Impossible de se connecter a la base"));
@@ -387,7 +394,7 @@ if ($_GET[action] == "disk") {
 
 /******************** Affichage de la page ******************************************/
 echo "<P><h1>".gettext("Gestion des sauvegardes")."</h1></P>";
-if ($_GET[action] == "restoreUSB") {
+if ($action == "restoreUSB") {
 	if (file_exists("/etc/backuppc/restore.lck")) {
 	  unlink("/etc/backuppc/restore.lck");
 	}
@@ -395,7 +402,7 @@ if ($_GET[action] == "restoreUSB") {
 	restoreUSB();
 	echo "</PRE>";
 }
-if ($_GET[action] == "umountUSB") {
+if ($action == "umountUSB") {
 	if (!file_exists("/etc/backuppc/restore.lck")) {
 	  touch("/etc/backuppc/restore.lck");
 	}
@@ -407,7 +414,7 @@ if ($_GET[action] == "umountUSB") {
 echo "<br><br>";
 
 /*********************************** Affichage des archives ******************************/
-if ($_GET[action] == "list") {
+if ($action == "list") {
 	$rep=variables(ArchiveDest,$HostServer);
 	if (file_exists($rep)) {
 
@@ -442,7 +449,7 @@ if ($_GET[action] == "list") {
 	echo "</td></tr>\n";
 	echo "<tr><td>".gettext(" Etat du serveur de sauvegarde")."</td><td align=\"center\">"; 
 	
-	if ($_GET['action'] == 'stop')
+	if ($action == 'stop')
 			if (EtatBackupPc() == 1) {
 				stopBackupPc();
 				sleep(1);

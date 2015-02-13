@@ -36,15 +36,23 @@ require_once("lang.inc.php");
 bindtextdomain('sauvegarde',"/var/www/se3/locale");
 textdomain ('sauvegarde');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+$Share=$purifier->purify($_GET['Share']);
+$BackupFilesExclude=$purifier->purify($_GET['BackupFilesExclude']);
+
 
 // Verifie les droits
 if (is_admin("system_is_admin",$login)=="Y") {
-	$HostServer=$_GET['HostServer'];
+	$HostServer=$purifier->purify($_GET['HostServer']);
 
-if ($_GET[Share] != "") {
+if ($Share != "") {
         $Share = stripslashes($Share);
 }
-if ($_GET[BackupFilesExclude] != "") {
+if ($BackupFilesExclude != "") {
         $BackupFilesExclude = stripslashes($BackupFilesExclude);
 }
 		
@@ -102,7 +110,7 @@ echo "<br><br>";
 
 echo "<form method=\"get\" action=\"modif_host_suite.php\" >\n";
 
-echo "<input type=\"hidden\" name=\"HostServer\" value=\"$_GET[HostServer]\" />";
+echo "<input type=\"hidden\" name=\"HostServer\" value=\"$HostServer\" />";
 echo "<input type=\"hidden\" name=\"pass\" value=\"1\" />";
 echo "<input type=\"hidden\" name=\"TypeServer\" value=\"$TypeServer\" />";
 

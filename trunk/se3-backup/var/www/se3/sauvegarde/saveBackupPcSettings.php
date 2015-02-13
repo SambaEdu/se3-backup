@@ -26,6 +26,13 @@
 	require_once("lang.inc.php");
 	bindtextdomain('sauvegarde',"/var/www/se3/locale");
 	textdomain ('sauvegarde');
+        
+        // HTMLpurifier
+        include("../se3/includes/library/HTMLPurifier.auto.php");
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+
+        $bck_user = $purifier->purify($_POST['bck_user']);
 
 
 	// Verifie les droits
@@ -33,7 +40,7 @@
 	if (ldap_get_right("system_is_admin",$login)!="Y")
        	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 	
-	$bck_user = trim($_POST['bck_user']);
+	$bck_user = trim($bck_user);
 		
 	
 	$sql= "SELECT * FROM `params` WHERE name = 'bck_user';";
@@ -66,6 +73,6 @@
 
 
 	exec ("sudo /usr/share/se3/sbin/chgbpcuser.sh");
-	die("Modifications r�alis�es avec succes !");
+	die("Modifications r&eacute;alis&eacute;es avec succes !");
 
 ?>
