@@ -26,31 +26,28 @@
 include ("fonction_backup.inc.php");
 require ("config.inc.php");
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
-$HostServer = $purifier->purify($_GET['HostServer']);
-$TypeServer = $purifier->purify($_GET['TypeServer']);
-$XferMethod = $purifier->purify($_GET['XferMethod']);
-$dhcp = $purifier->purify($_GET['dhcp']);
-$Share = $purifier->purify($_GET['Share']);
 
-$ShareName1 = $purifier->purify($_GET['ShareName1']);
-$ShareName2 = $purifier->purify($_GET['ShareName2']);
-$defo = $purifier->purify($_GET['defo']);
-$Compte = $purifier->purify($_GET['Compte']);
-$PassWord = $purifier->purify($_GET['PassWord']);
-$AclName = $purifier->purify($_GET['AclName']);
-$LdapName = $purifier->purify($_GET['LdapName']);
-$MysqlName = $purifier->purify($_GET['MysqlName']);
-$Secrets = $purifier->purify($_GET['Secrets']);
-$BackupFilesExclude = $purifier->purify($_GET['BackupFilesExclude']);
-$TypeServerOld = $purifier->purify($_GET['TypeServerOld']);
-$ArchiveDest = $purifier->purify($_GET['ArchiveDest']);
-$ArchiveSplit = $purifier->purify($_GET['ArchiveSplit']);
-$err = $purifier->purify($_GET['err']);
+$HostServer = $_GET['HostServer'];
+$TypeServer = $_GET['TypeServer'];
+$XferMethod = $_GET['XferMethod'];
+$dhcp = $_GET['dhcp'];
+$Share = $_GET['Share'];
+
+$ShareName1 = $_GET['ShareName1'];
+$ShareName2 = $_GET['ShareName2'];
+$defo = $_GET['defo'];
+$Compte = $_GET['Compte'];
+$PassWord = $_GET['PassWord'];
+$AclName = $_GET['AclName'];
+$LdapName = $_GET['LdapName'];
+$MysqlName = $_GET['MysqlName'];
+$Secrets = $_GET['Secrets'];
+$BackupFilesExclude = $_GET['BackupFilesExclude'];
+$TypeServerOld = $_GET['TypeServerOld'];
+$ArchiveDest = $_GET['ArchiveDest'];
+$ArchiveSplit = $_GET['ArchiveSplit'];
+$err = $_GET['err'];
 
 if ($Share != "") {
 	$Share = stripslashes($Share);

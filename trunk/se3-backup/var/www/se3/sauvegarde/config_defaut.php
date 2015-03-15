@@ -34,10 +34,7 @@ require_once("lang.inc.php");
 bindtextdomain('sauvegarde',"/var/www/se3/locale");
 textdomain ('sauvegarde');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
+
 
 //aide
 $_SESSION["pageaide"]="Sauvegarde Backuppc";
@@ -45,33 +42,35 @@ $_SESSION["pageaide"]="Sauvegarde Backuppc";
 // Verifie les droits
 if (is_admin("system_is_admin",$login)=="Y")  {
 
-$action = $purifier->purify($_GET['action']);
+
+$action = $_GET['action'];
+
 
 /*************** Affiche la fin du traitement *************************/
-if($action=="modif") {
+if($_GET['action']=="modif") {
 
-	$WakeupSchedule=$purifier->purify($_GET['WakeupSchedule']);
-	$FullPeriod=$purifier->purify($_GET['FullPeriod']);
-	$IncrPeriod=$purifier->purify($_GET['IncrPeriod']);
-	$FullKeepCnt=$purifier->purify($_GET['FullKeepCnt']);
-	$FullKeepCntMin=$purifier->purify($_GET['FullKeepCntMin']);
-	$IncrKeepCnt=$purifier->purify($_GET['IncrKeepCnt']);
-	$IncrKeepCntMin=$purifier->purify($_GET['IncrKeepCntMin']);
-	$FullAgeMax=$purifier->purify($_GET['FullAgeMax']);
-	$IncrAgeMax=$purifier->purify($_GET['IncrAgeMax']);
-	$hourBegin=$purifier->purify($_GET['hourBegin']);
-	$hourEnd=$purifier->purify($_GET['hourEnd']);
-	$ipAddrBase=$purifier->purify($_GET['ipAddrBase']);
-	$first=$purifier->purify($_GET['first']);
-	$last=$purifier->purify($_GET['last']);
-	$EMailAdminUserName=$purifier->purify($_GET['EMailAdminUserName']);
-	$Lundi=$purifier->purify($_GET['Lundi']);
-	$Mardi=$purifier->purify($_GET['Mardi']);
-	$Mercredi=$purifier->purify($_GET['Mercredi']);
-	$Jeudi=$purifier->purify($_GET['Jeudi']);
-	$Vendredi=$purifier->purify($_GET['Vendredi']);
-	$Samedi=$purifier->purify($_GET['Samedi']);
-	$Dimanche=$purifier->purify($_GET['Dimanche']);
+	$WakeupSchedule=$_GET['WakeupSchedule'];
+	$FullPeriod=$_GET['FullPeriod'];
+	$IncrPeriod=$_GET['IncrPeriod'];
+	$FullKeepCnt=$_GET['FullKeepCnt'];
+	$FullKeepCntMin=$_GET['FullKeepCntMin'];
+	$IncrKeepCnt=$_GET['IncrKeepCnt'];
+	$IncrKeepCntMin=$_GET['IncrKeepCntMin'];
+	$FullAgeMax=$_GET['FullAgeMax'];
+	$IncrAgeMax=$_GET['IncrAgeMax'];
+	$hourBegin=$_GET['hourBegin'];
+	$hourEnd=$_GET['hourEnd'];
+	$ipAddrBase=$_GET['ipAddrBase'];
+	$first=$_GET['first'];
+	$last=$_GET['last'];
+	$EMailAdminUserName=$_GET['EMailAdminUserName'];
+	$Lundi=$_GET['Lundi'];
+	$Mardi=$_GET['Mardi'];
+	$Mercredi=$_GET['Mercredi'];
+	$Jeudi=$_GET['Jeudi'];
+	$Vendredi=$_GET['Vendredi'];
+	$Samedi=$_GET['Samedi'];
+	$Dimanche=$_GET['Dimanche'];
 	
 	// On v&#233;rifie que les variables sont remplies, sinon on met les valeurs par d&#233;faut
 	if ($WakeupSchedule == "") { $WakeupSchedule = "1..23"; }
@@ -87,9 +86,9 @@ if($action=="modif") {
 	if ($hourEnd == "") { $hourEnd = "20.0"; }
 
 	$weekDays = "[$Lundi,$Mardi,$Mercredi,$Jeudi,$Vendredi,$Samedi,$Dimanche]";
-	$weekDays = preg_replace("/,,|,,,|,,,,|,,,,,|,,,,,,/",",",$weekDays);
-	$weekDays = preg_replace("/\[,/","[",$weekDays);
-	$weekDays = preg_replace("/,\]/","]",$weekDays);
+	$weekDays = ereg_replace(",,|,,,|,,,,|,,,,,|,,,,,,",",",$weekDays);
+	$weekDays = ereg_replace("\[,","[",$weekDays);
+	$weekDays = ereg_replace(",\]","]",$weekDays);
 	
 
 	// On ouvre le fichier
@@ -369,22 +368,21 @@ if(file_exists("/etc/backuppc/config.pl")) {
   	$weekDays = variables(weekDays,config);
   	$ipAddrBase = variables(ipAddrBase,config);
   	
-	if (preg_match('/(.*)/',$ipAddrBase,$reg)) {
+	if (ereg("'(.*)'",$ipAddrBase,$reg)) {
   		$ipAddrBase=trim($reg[1]);
   	}	
   
   	$first = variables(first,config);
-  	if (preg_match('/(.*)/',$first,$reg)) {
+  	if (ereg("'(.*)'",$first,$reg)) {
   		$first=trim($reg[1]);
   	}	
   
   	$last = variables(last,config);
-  	if (preg_match('/(.*)/',$last,$reg)) {
+  	if (ereg("'(.*)'",$last,$reg)) {
   		$last=trim($reg[1]);
   	}	
 } else {
-	//valeurs par de/
-        //faut
+	//valeurs par defaut
 	if ($WakeupSchedule == "") { $WakeupSchedule = "1..23"; }
 	if ($FullPeriod == "") { $FullPeriod = "6.97"; }
 	if ($IncrPeriod == "") { $IncrPeriod = "0.97"; }
@@ -397,9 +395,9 @@ if(file_exists("/etc/backuppc/config.pl")) {
 	if ($hourBegin == "") { $hourBegin = "6.0"; }
 	if ($hourEnd == "") { $hourEnd = "20.0"; }
 	$weekDays = "[1,2,3,4,5,,]";
-	$weekDays = preg_replace("/,,|,,,|,,,,|,,,,,|,,,,,,/",",",$weekDays);
-	$weekDays = preg_replace("/\[,/","[",$weekDays);
-	$weekDays = preg_replace("/,\]/","]",$weekDays);
+	$weekDays = ereg_replace(",,|,,,|,,,,|,,,,,|,,,,,,",",",$weekDays);
+	$weekDays = ereg_replace("\[,","[",$weekDays);
+	$weekDays = ereg_replace(",\]","]",$weekDays);
 }	
 	
 /***********************************************************************/
@@ -407,7 +405,7 @@ echo "<P><h1>";
 echo gettext("Configuration par d&#233;faut de Backuppc");
 echo "</h1></P>";
 
-if ($action == "modif") {
+if ($_GET['action'] == "modif") {
 	if (EtatBackupPc() == "1") {
 		echo "<center><h3>";
 	  	echo gettext("Relecture du fichier de conf. Modifications prises en compte");
@@ -452,19 +450,19 @@ echo "</td><td><input type=\"text\" name=\"hourBegin\" size=\"8\" value=\"$hourB
 echo "<td>". gettext("Heure de fin")."</td><td><input type=\"text\" name=\"hourEnd\" size=\"8\" value=\"$hourEnd\"></td></tr>\n";
 echo "<tr><td colspan=\"4\" align=\"center\">";
 echo gettext("Lun")."<input type=\"checkbox\" name=\"Lundi\" value=\"1\""; 
-if (preg_match ("/1/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("1",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Mar")." <input type=\"checkbox\" name=\"Mardi\" value=\"2\"";
-if (preg_match ("/2/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("2",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Mer")." <input type=\"checkbox\" name=\"Mercredi\" value=\"3\"";
-if (preg_match ("/3/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("3",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Jeu")."<input type=\"checkbox\" name=\"Jeudi\" value=\"4\"";
-if (preg_match ("/4/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("4",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Ven")."<input type=\"checkbox\" name=\"Vendredi\" value=\"5\"";
-if (preg_match ("/5/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("5",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Sam")." <input type=\"checkbox\" name=\"Samedi\" value=\"6\"";
-if (preg_match ("/6/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("6",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Dim")."<input type=\"checkbox\" name=\"Dimanche\" value=\"7\"";
-if (preg_match ("/7/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("7",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo "</td></tr></table><br><br>";
 
 

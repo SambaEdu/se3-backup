@@ -38,11 +38,7 @@
    bindtextdomain('sauvegarde',"/var/www/se3/locale");
    textdomain ('sauvegarde');
    
-   // HTMLpurifier
-    include("../se3/includes/library/HTMLPurifier.auto.php");
-    $config = HTMLPurifier_Config::createDefault();
-    $purifier = new HTMLPurifier($config);
-
+   
 
 
 ###############################################################################
@@ -338,11 +334,11 @@ if (ldap_get_right("system_is_admin",$login)!="Y")
 //aide 
 $_SESSION["pageaide"]="Sauvegarde Backuppc";
 
-$drive = $purifier->purify($_GET['drive']);
-$space = $purifier->purify($_GET['space']);
-$action = $purifier->purify($_GET['action']);
-$bpcmediaNew = $purifier->purify($_GET['bpcmediaNew']);
-$usbdisk = $purifier->purify($_GET['usbdisk']);
+$drive = $_GET['drive'];
+$space = $_GET['space'];
+$action = $_GET['action'];
+$bpcmediaNew = $_GET['bpcmediaNew'];
+$usbdisk = $_GET['usbdisk'];
 					       
 /***************************************************************************************************/
 if (isset($usbdisk) and ! isset ($action)) {

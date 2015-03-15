@@ -34,20 +34,17 @@
    bindtextdomain('sauvegarde',"/var/www/se3/locale");
    textdomain ('sauvegarde');
    
-   // HTMLpurifier
-    include("../se3/includes/library/HTMLPurifier.auto.php");
-    $config = HTMLPurifier_Config::createDefault();
-    $purifier = new HTMLPurifier($config);
+   
     
-    $action=$purifier->purify($_GET['action']);
-    $supp=$purifier->purify($_GET['supp']);
+    $action=$_GET['action'];
+    $supp=$_GET['supp'];
 
 
 // Verifie les droits
 if (is_admin("system_is_admin",$login)=="Y") {
 
-	$HostServer=$purifier->purify($_GET['HostServer']);
-	$TypeServer=$purifier->purify($_GET['TypeServer']);
+	$HostServer=$_GET['HostServer'];
+	$TypeServer=$_GET['TypeServer'];
 	
 	// verifie la coherence entre le fichier hosts et la presence du fichier machine.pl
 	HostCoherence();
