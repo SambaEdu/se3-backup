@@ -27,12 +27,9 @@
 	bindtextdomain('sauvegarde',"/var/www/se3/locale");
 	textdomain ('sauvegarde');
         
-        // HTMLpurifier
-        include("../se3/includes/library/HTMLPurifier.auto.php");
-        $config = HTMLPurifier_Config::createDefault();
-        $purifier = new HTMLPurifier($config);
+        
 
-        $bck_user = $purifier->purify($_POST['bck_user']);
+        $bck_user = $_POST['bck_user'];
 
 
 	// Verifie les droits

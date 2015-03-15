@@ -35,12 +35,9 @@
    bindtextdomain('sauvegarde',"/var/www/se3/locale");
    textdomain ('sauvegarde');
    
-   // HTMLpurifier
-    include("../se3/includes/library/HTMLPurifier.auto.php");
-    $config = HTMLPurifier_Config::createDefault();
-    $purifier = new HTMLPurifier($config);
+   
 
-    $user=$purifier->purify($_POST[user]);
+    $user=$_POST[user];
 
 
 ###############################################################################
