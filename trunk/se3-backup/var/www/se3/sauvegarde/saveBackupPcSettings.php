@@ -27,7 +27,8 @@
 	bindtextdomain('sauvegarde',"/var/www/se3/locale");
 	textdomain ('sauvegarde');
         
-        
+        // HTMLPurifier
+        require_once ("traitement_data.inc.php");
 
         $bck_user = $_POST['bck_user'];
 
