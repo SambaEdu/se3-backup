@@ -29,6 +29,8 @@ include ("fonction_backup.inc.php");
 require ("config.inc.php");
 include ("fonctions_rsyncdconf.inc.php");
 
+// HTMLPurifier
+require_once ("traitement_data.inc.php");
 
 
 $HostServer = $_GET['HostServer'];

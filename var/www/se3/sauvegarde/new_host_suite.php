@@ -26,7 +26,8 @@
 
 include ("fonction_backup.inc.php");
 
-
+// HTMLPurifier
+require_once ("traitement_data.inc.php");
 
 	
 // if ((is_admin("system_is_admin",$login)=="Y") or (is_admin("inventaire_can_read",$login)=="Y")) {
