@@ -28,7 +28,7 @@ then
 	update-rc.d -f backuppc remove
 	update-rc.d -f backuppc stop 0 1 2 3 4 5 6 .
 
-	# On vérifie (semble pas toujours vouloir stopper)
+	# On vÃ©rifie (semble pas toujours vouloir stopper)
 	if [ "`/bin/ps awux | grep BackupPC_trashClean | grep -v grep`" != "" ]
 	then
 		killall -9 BackupPC_trashClean
@@ -43,7 +43,7 @@ if [ "$1" = "start" ]
 then
 	ps ax|grep BackupPC >/dev/null|| (
 		echo "Correction droits sur backuppc"
-		/usr/share/se3/sbin/permbackuppc.sh
+		/usr/share/se3/scripts/permbackuppc
 		/etc/init.d/backuppc start
 	)
 	update-rc.d -f backuppc remove
