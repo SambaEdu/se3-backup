@@ -73,15 +73,18 @@ case "$1" in
 
 	if [ ! -e /etc/apache2se/sites-enabled/backuppc.conf ]; then  
         	ln -s /etc/backuppc/apache2se.conf /etc/apache2se/sites-enabled/backuppc.conf
-        fi         
+    fi         
 
-         # On recharge la conf d'apache2se
-         /etc/init.d/apache2se reload
+	# On recharge la conf d'apache2se
+	/etc/init.d/apache2se reload
 
-         # Modifie la conf par defaut
-         perl -pi -e "s/Conf{Language} = 'en'/Conf{Language} = 'fr'/" /etc/backuppc/config.pl
+	# Modifie la conf par defaut
+	perl -pi -e "s/Conf{Language} = 'en'/Conf{Language} = 'fr'/" /etc/backuppc/config.pl
 
-        # Ajout dans sudoers
+    # sudoers
+	echo "Maj droits sudoers..."
+	chmod 440 /etc/sudoers.d/sudoers-se3backup
+
     ;;
 
     *)
