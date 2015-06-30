@@ -3,7 +3,7 @@
 
 # Cmnd alias specification
 
-Cmnd_Alias BACKUP = /usr/share/se3/scripts/startbackup, /usr/share/se3/scripts/move_rep_backuppc.sh, /usr/share/se3/scripts/permbackuppc.sh, /usr/share/se3/sbin/testbackup.sh, /usr/share/se3/sbin/diskdetect.sh, /usr/share/se3/sbin/restorebackup.sh, /usr/share/se3/sbin/umountusbdisk.sh, /usr/share/se3/scripts/mk_rsyncconf.sh, /usr/share/se3/scripts/dfbck.sh, /usr/share/se3/sbin/chgbpcuser.sh,/usr/share/se3/scripts/udev_disk_rule.sh,/usr/share/se3/scripts/format_disk.sh
+Cmnd_Alias BACKUP = /usr/share/se3/scripts/startbackup, /usr/share/se3/scripts/move_rep_backuppc.sh, /usr/share/se3/scripts/permbackuppc.sh, /usr/share/se3/sbin/testbackup.sh, /usr/share/se3/sbin/diskdetect.sh, /usr/share/se3/sbin/restorebackup.sh, /usr/share/se3/sbin/umountusbdisk.sh, /usr/share/se3/scripts/dfbck.sh, /usr/share/se3/sbin/chgbpcuser.sh,/usr/share/se3/scripts/udev_disk_rule.sh,/usr/share/se3/scripts/format_disk.sh
 Cmnd_Alias BACKUP1 = /usr/share/se3/scripts/tarCreate, /usr/share/se3/scripts/tarRestore
 
 
