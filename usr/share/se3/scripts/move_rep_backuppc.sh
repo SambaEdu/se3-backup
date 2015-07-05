@@ -11,8 +11,8 @@
 
 if [ -f /tmp/move_backuppc.lock ]
 then
-	echo "Lock trouv�"
-	logger -t "BackupPc" "Lock trouv�..."
+	echo "Lock trouvé"
+	logger -t "BackupPc" "Lock trouvé..."
 else 
 
   if [ "$1" = "" -o "$2" = "" ]
@@ -31,7 +31,7 @@ else
   # On place un lock
   touch /tmp/move_backuppc.lock
 
-  # On copie le r�pertoire backuppc vers la nouvelle destination
+  # On copie le répertoire backuppc vers la nouvelle destination
   # Cas ou on essaye de revenir dans /var/lib
   if [ "$2" = "/var/lib/backuppc" ]
   then
@@ -41,9 +41,9 @@ else
 	fi
   fi	
   mv $1 $2
-  logger -t "BackupPc" "Repertoire d�plac� de $1 vers $2"
+  logger -t "BackupPc" "Repertoire déplacé de $1 vers $2"
   
-  # On recr�e le lien symb de /var/lib/backuppc
+  # On recrée le lien symb de /var/lib/backuppc
   if [ "$?" = "0" ]
   then
 	if [ -L "/var/lib/backuppc" -o ! -d "/var/lib/backuppc" ]
