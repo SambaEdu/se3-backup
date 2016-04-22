@@ -86,7 +86,7 @@ if [ "$1" = "cron" ]; then
 		test_media
 		[ "$EXIT1" = "1" ] && stop_service
 	else
-		if [ $backuppc = "1" ]; then
+		if [ "$backuppc" = "1" ]; then
 			if [ ! -e /tmp/alerte-backuppc ]; then
 				
 				echo "Attention, le module sauvegarde est actif mais le service backuppc est off"
