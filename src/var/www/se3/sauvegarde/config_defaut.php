@@ -684,10 +684,10 @@ echo gettext("('Lorsqu\'une machine n\'a pas une adresse IP fixe (n\'est pas dan
 echo "\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
 echo "<tr>
       <td>".gettext("Adresse de base (forme 172.16.0) :")."</td>
-      <td><input name=\"ipAddrBase\" type=\"text\" size=\"40\" value=\"$ipAddrBase\"  > </td>
+      <td><input name=\"ipAddrBase\" type=\"text\" size=\"40\" value=\"".htmlspecialchars($ipAddrBase, ENT_QUOTES, 'UTF-8')."\"  > </td>
       </tr>
-      <tr><td>".gettext("Adresse de d&#233;but :")."</td><td><input type=\"text\" name=\"first\" value=\"$first\"></td></tr>		
-      <tr><td>".gettext("Adresse de fin :")."</td><td><input type=\"text\" name=\"last\" value=\"$last\"></td></tr></table>\n";		
+      <tr><td>".gettext("Adresse de d&#233;but :")."</td><td><input type=\"text\" name=\"first\" value=\"".htmlspecialchars($first, ENT_QUOTES, 'UTF-8')."\"></td></tr>		
+      <tr><td>".gettext("Adresse de fin :")."</td><td><input type=\"text\" name=\"last\" value=\"".htmlspecialchars($last, ENT_QUOTES, 'UTF-8')."\"></td></tr></table>\n";		
 echo "<br><br>";
 
 
@@ -698,7 +698,7 @@ echo gettext("('Indiquqer ici, l\'adresse mail de la personne qui doit recevoir 
 echo "\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
 echo "<tr><td>";
 echo gettext("Mail envoy&#233; par d&#233;faut &#224; :");
-echo "</td><td><input type=\"text\" name=\"EMailAdminUserName\" size=\"50\" value=\"$EMailAdminUserName\"></td></tr>";
+echo "</td><td><input type=\"text\" name=\"EMailAdminUserName\" size=\"50\" value=\"".htmlspecialchars($EMailAdminUserName, ENT_QUOTES, 'UTF-8')."\"></td></tr>";
 echo "</table>\n";
 echo "<br><br>";
 

@@ -59,7 +59,7 @@ if ($action=="del") {
 	echo "<form method=\"get\" action=\"sauvhost.php\" >";
 	echo"<table align=center width=\"60%\" border=1 cellspacing=\"0\" cellpadding=\"0\">\n";
 	if (GetTypeServer($HostServer)!="Archive") {
-		echo"<tr><td colspan=\"3\" bgcolor=#E0E0E0 align=\"center\">".gettext("Machine")." $HostServer ".gettext("&#224; supprimer de la sauvegarde")."</td></tr>";
+		echo"<tr><td colspan=\"3\" bgcolor=#E0E0E0 align=\"center\">".gettext("Machine")." ".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')." ".gettext("&#224; supprimer de la sauvegarde")."</td></tr>";
 		echo"<tr><td>";
 	  	echo gettext("D&#233;sactiver cette machine de la sauvegarde");
 	  	echo"</td><td>";
@@ -73,7 +73,7 @@ if ($action=="del") {
 	} else {
 		$TypeServer="Archive";
 	  
-	  	echo"<tr><td colspan=\"3\" bgcolor=#E0E0E0 align=\"center\">".gettext("Archive")." $HostServer ".gettext("&#224; supprimer de la sauvegarde")."</td></tr>";
+	  	echo"<tr><td colspan=\"3\" bgcolor=#E0E0E0 align=\"center\">".gettext("Archive")." ".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')." ".gettext("&#224; supprimer de la sauvegarde")."</td></tr>";
  	  	echo"<tr><td>";
 	  	echo gettext("Supprimer cette archive, sans supprimer les archives existantes.");
 	  	echo"</td><td>";
@@ -84,8 +84,8 @@ if ($action=="del") {
 	
 	echo "</tr></table>";
 	echo"<br>";
-	echo"<input name=HostServer type=hidden value=\"$HostServer\">";
-	echo"<input name=TypeServer type=hidden value=\"$TypeServer\">";
+	echo"<input name=HostServer type=hidden value=\"".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."\">";
+	echo"<input name=TypeServer type=hidden value=\"".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."\">";
 	echo"<input name=action type=hidden value=del2>";
 	echo "<center><input name=\"formsauv\" type=\"submit\"  value=\"".gettext("Valider")."\">";
 	echo "</center></form>\n";

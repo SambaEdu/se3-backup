@@ -56,12 +56,12 @@ require ("config.inc.php");
 	$c = mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'NAS_mntsuffix', '$NAS_mntsuffix', '0', 'suffixe de montage NAS', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'NAS_mntsuffix', '".mysql_real_escape_string($NAS_mntsuffix)."', '0', 'suffixe de montage NAS', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` =  '$NAS_mntsuffix', `cat` = 5  WHERE `params`.`name` ='NAS_mntsuffix' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` =  '".mysql_real_escape_string($NAS_mntsuffix)."', `cat` = 5  WHERE `params`.`name` ='NAS_mntsuffix' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 	
@@ -76,12 +76,12 @@ require ("config.inc.php");
 	$c = mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'NAS_protocol', '$NAS_protocol', '0', 'protocole NAS cifs ou nfs', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'NAS_protocol', '".mysql_real_escape_string($NAS_protocol)."', '0', 'protocole NAS cifs ou nfs', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$NAS_protocol' , `cat` = 5 WHERE `params`.`name` ='NAS_protocol' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($NAS_protocol)."' , `cat` = 5 WHERE `params`.`name` ='NAS_protocol' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 
@@ -91,15 +91,15 @@ require ("config.inc.php");
 	if  (count($test) != 4)
 		die("Votre adresse IP est invalide exemple: x.x.x.x !");
 	$sql= "SELECT * FROM `params` WHERE name = 'NAS_ip';";
-	$c= mysql_query($sql) or die("ERREUR: $sql");
+	$c= mysql_query($sql) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'NAS_ip', '$NAS_ip', '0', 'adresse IP du NAS', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'NAS_ip', '".mysql_real_escape_string($NAS_ip)."', '0', 'adresse IP du NAS', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$NAS_ip' , `cat` = 5  WHERE `params`.`name` ='NAS_ip' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($NAS_ip)."' , `cat` = 5  WHERE `params`.`name` ='NAS_ip' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 	###################################################################################
@@ -110,12 +110,12 @@ require ("config.inc.php");
 	$c= mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'NAS_share', '$NAS_share', '0', 'nom de partage du NAS', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'NAS_share', '".mysql_real_escape_string($NAS_share)."', '0', 'nom de partage du NAS', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$NAS_share' , `cat` = 5  WHERE `params`.`name` ='NAS_share' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($NAS_share)."' , `cat` = 5  WHERE `params`.`name` ='NAS_share' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 
@@ -131,12 +131,12 @@ require ("config.inc.php");
 	$c= mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'NAS_login', '$NAS_login', '0', 'login de connexion au NAS', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'NAS_login', '".mysql_real_escape_string($NAS_login)."', '0', 'login de connexion au NAS', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$NAS_login' , `cat` = 5 WHERE `params`.`name` ='NAS_login' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($NAS_login)."' , `cat` = 5 WHERE `params`.`name` ='NAS_login' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 
@@ -152,12 +152,12 @@ require ("config.inc.php");
 	$c= mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'NAS_pass', '$NAS_pass', '0', 'mot de passe du NAS', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'NAS_pass', '".mysql_real_escape_string($NAS_pass)."', '0', 'mot de passe du NAS', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$NAS_pass' , `cat` = 5 WHERE `params`.`name` ='NAS_pass' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($NAS_pass)."' , `cat` = 5 WHERE `params`.`name` ='NAS_pass' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 
