@@ -57,7 +57,7 @@ if ($_POST['user'] == '')
 	die('-1');
 
 $user = $user.':';
-$command = `getent passwd | grep $user`;
+$command = exec("getent passwd | grep ".escapeshellarg($user));
 
 $arr_infos = explode(':',$command);
 die($arr_infos[2]);

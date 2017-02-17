@@ -303,7 +303,7 @@ function DeleteRep($HostServer) { // Detruit le repertoire de la sauvegarde de l
 	$rep = $dir_backup.$HostServer;
 	if(is_dir($rep)) {
             $cmd="/usr/bin/sudo /usr/share/se3/scripts/move_rep_backuppc.sh delete ".$HostServer;
-            exec($cmd);
+            exec(escapeshellarg($cmd));
          }
 }	
 
@@ -414,7 +414,7 @@ function stripslashes2($valeur) { //vire les / lorsqu'ils sont en double ou trip
 
 function MoveRep($drive,$space) { // deplace le repertoire de sauvegarde $drive vers $space
 	$cmd="/usr/bin/sudo /usr/share/se3/scripts/move_rep_backuppc.sh ".$drive." ".$space;
-	exec($cmd);
+	exec(escapeshellarg($cmd));
 }	
 
 //=================================================

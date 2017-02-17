@@ -253,7 +253,7 @@ read only=$readOnly";
 
 
         // On lance le script de conf
-        exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start $Compte $PassWord");
+        exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start ".escapeshellarg($Compte)." ".escapeshellarg($PassWord));
 
 }    
 
@@ -262,7 +262,7 @@ read only=$readOnly";
 if ($HostServer == "localhost") {
     $sql="Delete from params where name='mysql_all_save';";
    	mysql_query($sql);
-   	$sql="Insert into params values ('', 'mysql_all_save', '".$MysqlName."', '5', '0', 'Sauvegarde de l ensemble des base SQL pour localhost');";
+   	$sql="Insert into params values ('', 'mysql_all_save', '".mysql_real_escape_string($MysqlName)."', '5', '0', 'Sauvegarde de l ensemble des base SQL pour localhost');";
    	mysql_query($sql);
    	mysql_close();
 } // fin de si localhost

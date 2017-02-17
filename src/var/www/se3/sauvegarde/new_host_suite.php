@@ -61,21 +61,21 @@ if ($BackupFilesExclude != "") {
 if ($HostServer != "") {
         if (HostExist($HostServer)=="true") { 
 		$err="1"; 
-		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host.php?HostServer=$HostServer&TypeServer=$TypeServer&XferMethod=$XferMethod&Share=$Share&defo=$defo&Compte=$Compte&PassWord=$PassWord&AclName=$AclName&LdapName=$LdapName&MysqlName=$MysqlName&Secrets=$Secrets&dhcp=$dhcp&BackupFilesExclude=$BackupFilesExclude&TypeServerOld=$TypeServerOld&err=$err\">";
+		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host.php?HostServer=".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."&TypeServer=".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."&XferMethod=".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."&Share=".htmlspecialchars($Share, ENT_QUOTES, 'UTF-8')."&defo=".htmlspecialchars($defo, ENT_QUOTES, 'UTF-8')."&Compte=".htmlspecialchars($Compte, ENT_QUOTES, 'UTF-8')."&PassWord=".htmlspecialchars($PassWord, ENT_QUOTES, 'UTF-8')."&AclName=".htmlspecialchars($AclName, ENT_QUOTES, 'UTF-8')."&LdapName=".htmlspecialchars($LdapName, ENT_QUOTES, 'UTF-8')."&MysqlName=".htmlspecialchars($MysqlName, ENT_QUOTES, 'UTF-8')."&Secrets=".htmlspecialchars($Secrets, ENT_QUOTES, 'UTF-8')."&dhcp=".htmlspecialchars($dhcp, ENT_QUOTES, 'UTF-8')."&BackupFilesExclude=".htmlspecialchars($BackupFilesExclude, ENT_QUOTES, 'UTF-8')."&TypeServerOld=".htmlspecialchars($TypeServerOld, ENT_QUOTES, 'UTF-8')."&err=".htmlspecialchars($err, ENT_QUOTES, 'UTF-8')."\">";
 	exit;
 	}
 }
 
 if (($HostServer != "") and ($XferMethod=="archive") and ($ArchiveDest!="")) {
 	if ($ArchiveSplit=="") { $ArchiveSplit="0"; }
-	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host_valid.php?HostServer=$HostServer&TypeServer=$TypeServer&XferMethod=$XferMethod&ArchiveDest=$ArchiveDest&ArchiveSplit=$ArchiveSplit&dhcp=$dhcp&TypeServerOld=$TypeServerOld\">";
+	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host_valid.php?HostServer=".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."&TypeServer=".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."&XferMethod=".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."&ArchiveDest=".htmlspecialchars($ArchiveDest, ENT_QUOTES, 'UTF-8')."&ArchiveSplit=".htmlspecialchars($ArchiveSplit, ENT_QUOTES, 'UTF-8')."&dhcp=".htmlspecialchars($dhcp, ENT_QUOTES, 'UTF-8')."&TypeServerOld=".htmlspecialchars($TypeServerOld, ENT_QUOTES, 'UTF-8')."\">";
 	exit;
 }
 
 
 if (($HostServer == "") or ($TypeServer == "") or ($XferMethod == "") or ($dhcp == "") or ($Share == "") or ($defo == "")) {
 	$err="4";
-	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host.php?HostServer=$HostServer&TypeServer=$TypeServer&XferMethod=$XferMethod&Share=$Share&defo=$defo&Compte=$Compte&PassWord=$PassWord&AclName=$AclName&LdapName=$LdapName&MysqlName=$MysqlName&Secrets=$Secrets&dhcp=$dhcp&BackupFilesExclude=$BackupFilesExclude&TypeServerOld=$TypeServerOld&err=$err\">";
+	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host.php?HostServer=".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."&TypeServer=".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."&XferMethod=".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."&Share=".htmlspecialchars($Share, ENT_QUOTES, 'UTF-8')."&defo=".htmlspecialchars($defo, ENT_QUOTES, 'UTF-8')."&Compte=".htmlspecialchars($Compte, ENT_QUOTES, 'UTF-8')."&PassWord=".htmlspecialchars($PassWord, ENT_QUOTES, 'UTF-8')."&AclName=".htmlspecialchars($AclName, ENT_QUOTES, 'UTF-8')."&LdapName=".htmlspecialchars($LdapName, ENT_QUOTES, 'UTF-8')."&MysqlName=".htmlspecialchars($MysqlName, ENT_QUOTES, 'UTF-8')."&Secrets=".htmlspecialchars($Secrets, ENT_QUOTES, 'UTF-8')."&dhcp=".htmlspecialchars($dhcp, ENT_QUOTES, 'UTF-8')."&BackupFilesExclude=".htmlspecialchars($BackupFilesExclude, ENT_QUOTES, 'UTF-8')."&TypeServerOld=".htmlspecialchars($TypeServerOld, ENT_QUOTES, 'UTF-8')."&err=".htmlspecialchars($err, ENT_QUOTES, 'UTF-8')."\">";
 	exit;
 }	
 
@@ -84,7 +84,7 @@ if (($HostServer == "") or ($TypeServer == "") or ($XferMethod == "") or ($dhcp 
 if (($XferMethod == "smb") or ($XferMethod == "rsyncd")) {
 	if (($Compte == "") or ($PassWord == "")) {
 		$err = "2";
-		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host.php?HostServer=$HostServer&TypeServer=$TypeServer&XferMethod=$XferMethod&Share=$Share&defo=$defo&Compte=$Compte&PassWord=$PassWord&AclName=$AclName&LdapName=$LdapName&MysqlName=$MysqlName&Secrets=$Secrets&dhcp=$dhcp&BackupFilesExclude=$BackupFilesExclude&TypeServerOld=$TypeServerOld&err=$err\">";
+		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host.php?HostServer=".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."&TypeServer=".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."&XferMethod=".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."&Share=".htmlspecialchars($Share, ENT_QUOTES, 'UTF-8')."&defo=".htmlspecialchars($defo, ENT_QUOTES, 'UTF-8')."&Compte=".htmlspecialchars($Compte, ENT_QUOTES, 'UTF-8')."&PassWord=".htmlspecialchars($PassWord, ENT_QUOTES, 'UTF-8')."&AclName=".htmlspecialchars($AclName, ENT_QUOTES, 'UTF-8')."&LdapName=".htmlspecialchars($LdapName, ENT_QUOTES, 'UTF-8')."&MysqlName=".htmlspecialchars($MysqlName, ENT_QUOTES, 'UTF-8')."&Secrets=".htmlspecialchars($Secrets, ENT_QUOTES, 'UTF-8')."&dhcp=".htmlspecialchars($dhcp, ENT_QUOTES, 'UTF-8')."&BackupFilesExclude=".htmlspecialchars($BackupFilesExclude, ENT_QUOTES, 'UTF-8')."&TypeServerOld=".htmlspecialchars($TypeServerOld, ENT_QUOTES, 'UTF-8')."&err=".htmlspecialchars($err, ENT_QUOTES, 'UTF-8')."\">";
 		exit;
 		}
 }	
@@ -125,7 +125,7 @@ if ($defo=="N") { // Dans le cas ou on veut faire une conf particuli&#233;re
 	$hourEnd = variables(hourEnd,config);
 	$weekDays = variables(weekDays,config);
 
-  	echo "<P><h1>".gettext("Configuration sp&#233;cifique &#224; la machine")." $HostServer</h1></P>";
+  	echo "<P><h1>".gettext("Configuration sp&#233;cifique &#224; la machine")." ".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."</h1></P>";
 	echo "<form method=\"get\" action=\"new_host_valid.php\" >";
   	echo "<br><br>\n";
   	echo "<table align=center width=\"70%\" border=1 cellspacing=\"1\" cellpadding=\"0\">\n";
@@ -172,18 +172,18 @@ if ($defo=="N") { // Dans le cas ou on veut faire une conf particuli&#233;re
   
   	echo "<br><br>";
 
-  	echo "<input type=\"hidden\" name=\"HostServer\" value=\"$HostServer\" />";
-  	echo "<input type=\"hidden\" name=\"TypeServer\" value=\"$TypeServer\" />";
-  	echo "<input type=\"hidden\" name=\"XferMethod\" value=\"$XferMethod\" />";
-  	echo "<input type=\"hidden\" name=\"Share\" value=\"$Share\" />";
-  	echo "<input type=\"hidden\" name=\"Compte\" value=\"$Compte\" />";
-  	echo "<input type=\"hidden\" name=\"PassWord\" value=\"$PassWord\" />";
-  	echo "<input type=\"hidden\" name=\"AclName\" value=\"$AclName\" />";
-  	echo "<input type=\"hidden\" name=\"LdapName\" value=\"$LdapName\" />";
-  	echo "<input type=\"hidden\" name=\"MysqlName\" value=\"$MysqlName\" />";
-  	echo "<input type=\"hidden\" name=\"Secrets\" value=\"$Secrets\" />";
-  	echo "<input type=\"hidden\" name=\"dhcp\" value=\"$dhcp\" />";
-  	echo "<input type=\"hidden\" name=\"BackupFilesExclude\" value=\"$BackupFilesExclude\" />";
+  	echo "<input type=\"hidden\" name=\"HostServer\" value=\"".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"TypeServer\" value=\"".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"XferMethod\" value=\"".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"Share\" value=\"".htmlspecialchars($Share, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"Compte\" value=\"".htmlspecialchars($Compte, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"PassWord\" value=\"".htmlspecialchars($PassWord, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"AclName\" value=\"".htmlspecialchars($AclName, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"LdapName\" value=\"".htmlspecialchars($LdapName, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"MysqlName\" value=\"".htmlspecialchars($MysqlName, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"Secrets\" value=\"".htmlspecialchars($Secrets, ENT_QUOTES, 'UTF-8')."".htmlspecialchars($Secrets, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"dhcp\" value=\"".htmlspecialchars($dhcp, ENT_QUOTES, 'UTF-8')."\" />";
+  	echo "<input type=\"hidden\" name=\"BackupFilesExclude\" value=\"".htmlspecialchars($BackupFilesExclude, ENT_QUOTES, 'UTF-8')."\" />";
 
   	echo "<center><u onmouseover=\"return escape".gettext("('La validation va cr&#233;er le fichier de configuration par d&#233;faut, et relancer le serveur de sauvegarde.<br>Les champs vides, seront automatiquement compl&#233;t&#233;s, avec les valeurs par d&#233;faut.<br><br>Si celui-ci ne se relance pas, cela implique tr&#232;s probablement une erreur dans le fichier.<br><br>Si vous savez pas comment remplir les champs, vous pouvez les laisser libre et simplement valider')")."\"><input type=\"submit\"  value=\"".gettext("Valider")."\"></u></center>";
   	echo "</form>\n";
@@ -191,7 +191,7 @@ if ($defo=="N") { // Dans le cas ou on veut faire une conf particuli&#233;re
   	require ("pdp.inc.php");
 
 } elseif ($defo == "Y") {
-	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host_valid.php?HostServer=$HostServer&TypeServer=$TypeServer&XferMethod=$XferMethod&Share=$Share&defo=$defo&Compte=$Compte&PassWord=$PassWord&AclName=$AclName&LdapName=$LdapName&MysqlName=$MysqlName&Secrets=$Secrets&dhcp=$dhcp&BackupFilesExclude=$BackupFilesExclude\">";
+	echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=new_host_valid.php?HostServer=".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."&TypeServer=".htmlspecialchars($TypeServer, ENT_QUOTES, 'UTF-8')."&XferMethod=".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."&Share=".htmlspecialchars($Share, ENT_QUOTES, 'UTF-8')."&defo=".htmlspecialchars($defo, ENT_QUOTES, 'UTF-8')."&Compte=".htmlspecialchars($Compte, ENT_QUOTES, 'UTF-8')."&PassWord=".htmlspecialchars($PassWord, ENT_QUOTES, 'UTF-8')."&AclName=".htmlspecialchars($AclName, ENT_QUOTES, 'UTF-8')."&LdapName=".htmlspecialchars($LdapName, ENT_QUOTES, 'UTF-8')."&MysqlName=".htmlspecialchars($MysqlName, ENT_QUOTES, 'UTF-8')."&Secrets=".htmlspecialchars($Secrets, ENT_QUOTES, 'UTF-8')."&dhcp=".htmlspecialchars($dhcp, ENT_QUOTES, 'UTF-8')."&BackupFilesExclude=".htmlspecialchars($BackupFilesExclude, ENT_QUOTES, 'UTF-8')."\">";
 }
 
 ?>			  

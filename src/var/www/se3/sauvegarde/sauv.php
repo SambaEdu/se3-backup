@@ -344,15 +344,15 @@ $usbdisk = $_GET['usbdisk'];
 if (isset($usbdisk) and ! isset ($action)) {
 	$sql="Delete from params where name='usbdisk';";
 	mysql_query($sql);
-	$sql="Insert into params values ('', 'usbdisk', '".$usbdisk."', '5', '0', 'Disque de sauvegarde');";
+	$sql="Insert into params values ('', 'usbdisk', '".mysql_real_escape_string($usbdisk)."', '5', '0', 'Disque de sauvegarde');";
 	mysql_query($sql);
 	mysql_close();
-	system("sudo /usr/share/se3/scripts/udev_disk_rule.sh ".$usbdisk);
+	system("sudo /usr/share/se3/scripts/udev_disk_rule.sh ".escapeshellarg($usbdisk));
 	umountUSB ();
 }
 
 if ($action == "format") {
-	$return=system("sudo /usr/share/se3/scripts/format_disk.sh ".$usbdisk);
+	$return=system("sudo /usr/share/se3/scripts/format_disk.sh ".escapeshellarg($usbdisk));
 	echo $return;
 }
 

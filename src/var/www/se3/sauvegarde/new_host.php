@@ -88,11 +88,11 @@ if (is_admin("system_is_admin",$login)=="Y") {
 		echo "<br><br>";
 	}
 	if ($err == "2") {
-		echo "<font color=\"red\">".gettext("Attention : Vous devez indiquer le compte ou le mot de passe pour la connexion")." $XferMethod</font>";
+		echo "<font color=\"red\">".gettext("Attention : Vous devez indiquer le compte ou le mot de passe pour la connexion")." ".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."</font>";
 		echo "<br><br>";
 	}	
 	if ($err == "3") {
-		echo "<font color=\"red\">".gettext("Attention : Vous devez indiquer la cl&#233; pour la connexion")." $XferMethod</font>";
+		echo "<font color=\"red\">".gettext("Attention : Vous devez indiquer la cl&#233; pour la connexion")." ".htmlspecialchars($XferMethod, ENT_QUOTES, 'UTF-8')."</font>";
 		echo "<br><br>";
 	}	
 
@@ -105,7 +105,7 @@ if (is_admin("system_is_admin",$login)=="Y") {
 
 	echo "<form method=\"get\" action=\"new_host_suite.php\" >";
 
-	echo "<input type=\"hidden\" name=\"TypeServerOld\" value=\"$TypeServerOld\">";
+	echo "<input type=\"hidden\" name=\"TypeServerOld\" value=\"".htmlspecialchars($TypeServerOld, ENT_QUOTES, 'UTF-8')."\">";
 	echo "<table align=center width=\"70%\" border=1 cellspacing=\"0\" cellpadding=\"0\">
       	<tr><td colspan=\"2\" class='menuheader' height=\"30\" align=\"center\">".gettext("Machine &#224; sauvegarder")."</td></tr>\n";
 
@@ -189,14 +189,14 @@ if (is_admin("system_is_admin",$login)=="Y") {
 
 	if ($TypeServer=="Archive") {
 
-		echo "<tr><td>".gettext("Nom de l'archive")."</td><td><input type=text name=\"HostServer\" value=\"$HostServer\" size=\"45\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer ici le nom de l\'archive, par exemple cdArchiv ou TapeArchiv, ou en fonction du nom de la machine dont vous souhaitez archiver les sauvegardes.<br>Eviter les caract&#233;res particuliers.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>";
+		echo "<tr><td>".gettext("Nom de l'archive")."</td><td><input type=text name=\"HostServer\" value=\"".htmlspecialchars($HostServer, ENT_QUOTES, 'UTF-8')."\" size=\"45\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer ici le nom de l\'archive, par exemple cdArchiv ou TapeArchiv, ou en fonction du nom de la machine dont vous souhaitez archiver les sauvegardes.<br>Eviter les caract&#233;res particuliers.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>";
 	  	echo "</table>\n";
 	  	echo "<br><br>";
   
 	  	echo "<table align=center width=\"70%\" border=1 cellspacing=\"0\" cellpadding=\"0\">";
 	  	echo "<tr><td colspan=\"2\" class='menuheader' height=\"30\"  align=\"center\">".gettext("Support d'archivage")."</td></tr>\n";
-	  	echo "<tr><td>".gettext("Destination de l'archive")."</td><td><input type=\"text\" name=\"ArchiveDest\" value=\"$ArchiveDest\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer le support sur lequel archiver. /tmp pour le mettre dans le r&#233;pertoire tmp.<br><br>Pour archiver sur une bande indiquer /dev/st0 (&#224; v&#233;rifier en fonction de votre machine).')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
-		echo "<tr><td>".gettext("Taille de l'archive")."</td><td><input type=\"text\" name=\"ArchiveSplit\" value=\"$ArchiveSplit\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer la taille de l\'archive. Par exemple pour archiver sur un CD, en utilisant un graveur, indiquer 650. l\'archive sera alors coup&#233;e en plusieurs fichiers de 650.<br><br>Si vous laissez vide, aucune taille limite ne sera donn&#233;e (0 pas d&#233;faut).')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
+	  	echo "<tr><td>".gettext("Destination de l'archive")."</td><td><input type=\"text\" name=\"ArchiveDest\" value=\"".htmlspecialchars($ArchiveDest, ENT_QUOTES, 'UTF-8')."\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer le support sur lequel archiver. /tmp pour le mettre dans le r&#233;pertoire tmp.<br><br>Pour archiver sur une bande indiquer /dev/st0 (&#224; v&#233;rifier en fonction de votre machine).')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
+		echo "<tr><td>".gettext("Taille de l'archive")."</td><td><input type=\"text\" name=\"ArchiveSplit\" value=\"".htmlspecialchars($ArchiveSplit, ENT_QUOTES, 'UTF-8')."\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer la taille de l\'archive. Par exemple pour archiver sur un CD, en utilisant un graveur, indiquer 650. l\'archive sera alors coup&#233;e en plusieurs fichiers de 650.<br><br>Si vous laissez vide, aucune taille limite ne sera donn&#233;e (0 pas d&#233;faut).')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
 	  	echo "</table>";
 	  	echo "<input type=\"hidden\" name=\"XferMethod\" value=\"archive\" />";
 	  	echo "<input type=\"hidden\" name=\"TypeServer\" value=\"Archive\" />";
@@ -247,8 +247,8 @@ if (is_admin("system_is_admin",$login)=="Y") {
 
    		if(($XferMethod=="smb") or ($XferMethod=="rsyncd")) {
   	    		echo "<tr><td>";
-            		echo "<TR><td>".gettext("Compte de connexion")."</td><td><input type=text name=\"Compte\" value=\"$Compte\"></td></tr>";
-            		echo "<tr><td>".gettext("Mot de passe")."</td><td><input type=text name=\"PassWord\" value=\"$PassWord\"></td></tr>";
+            		echo "<TR><td>".gettext("Compte de connexion")."</td><td><input type=text name=\"Compte\" value=\"".htmlspecialchars($Compte, ENT_QUOTES, 'UTF-8')."\"></td></tr>";
+            		echo "<tr><td>".gettext("Mot de passe")."</td><td><input type=text name=\"PassWord\" value=\"".htmlspecialchars($PassWord, ENT_QUOTES, 'UTF-8')."\"></td></tr>";
   		}
 
   		echo "</table>\n";
@@ -308,9 +308,9 @@ if (is_admin("system_is_admin",$login)=="Y") {
 			} else {
 				echo "<tr><td width=\"40%\">".gettext("Modules &#224; sauvegarder :")."</td>";
 			}	
-        	 	echo "<td><input type=\"text\" name=\"Share\" value=\"$Share\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer les r&#233;pertoires &#224; sauvegarder. Vous devez mettre des <b>;</b> entre chaque r&#233;pertoire.<br>Par exemple /home;/var/se3;/etc<br><br> - Si la m&#233;thode de sauvegarde est rsyncd, vous devez indiquer le nom des modules, pas les r&#233;pertoires. Exemple module1;module2. Les r&#233;pertoires &#224; sauvegarder sont &#224; indiquer dans le fichier rsyncd.conf se trouvant sur la machine &#224; sauvegarder.<br><br> - Pour les machines Windows indiquer C:\\\BCDI;D:\\\mon_repertoire. Les fichiers syst&#232;mes en utilisation, ne peuvent pas &#234;tre sauvegard&#233;s.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
+        	 	echo "<td><input type=\"text\" name=\"Share\" value=\"".htmlspecialchars($Share, ENT_QUOTES, 'UTF-8')."\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer les r&#233;pertoires &#224; sauvegarder. Vous devez mettre des <b>;</b> entre chaque r&#233;pertoire.<br>Par exemple /home;/var/se3;/etc<br><br> - Si la m&#233;thode de sauvegarde est rsyncd, vous devez indiquer le nom des modules, pas les r&#233;pertoires. Exemple module1;module2. Les r&#233;pertoires &#224; sauvegarder sont &#224; indiquer dans le fichier rsyncd.conf se trouvant sur la machine &#224; sauvegarder.<br><br> - Pour les machines Windows indiquer C:\\\BCDI;D:\\\mon_repertoire. Les fichiers syst&#232;mes en utilisation, ne peuvent pas &#234;tre sauvegard&#233;s.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
         		echo "<tr><td width=\"40%\">".gettext(" Exclusions :")."</td>";
-			echo "<td><input type=\"text\" name=\"BackupFilesExclude\" value=\"$BackupFilesExclude\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer ici les exclusions. Celle-ci se font par rapport aux r&#233;pertoires &#224; sauvegarder.<br><br>Par exemple, si vous avez d&#233;cid&#233; de sauvegarder le r&#233;pertoire /home et que vous ne souhaitez pas sauvegarder le sous r&#233;pertoire ssh indiquer ici \'ssh\' sans indiquer le r&#233;pertoire parent.<br><br>Pour les machines Windows, si vous avez indiqu&#233; C$ et que vous ne souhaitez pas sauvegarder le r&#233;pertoire windows, indiquer ce r&#233;pertoire dans cet espace.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
+			echo "<td><input type=\"text\" name=\"BackupFilesExclude\" value=\"".htmlspecialchars($BackupFilesExclude, ENT_QUOTES, 'UTF-8')."\" size=\"40\">&nbsp;<u onmouseover=\"return escape".gettext("('Indiquer ici les exclusions. Celle-ci se font par rapport aux r&#233;pertoires &#224; sauvegarder.<br><br>Par exemple, si vous avez d&#233;cid&#233; de sauvegarder le r&#233;pertoire /home et que vous ne souhaitez pas sauvegarder le sous r&#233;pertoire ssh indiquer ici \'ssh\' sans indiquer le r&#233;pertoire parent.<br><br>Pour les machines Windows, si vous avez indiqu&#233; C$ et que vous ne souhaitez pas sauvegarder le r&#233;pertoire windows, indiquer ce r&#233;pertoire dans cet espace.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td></tr>\n";
   		}
 
   		echo "</table>";

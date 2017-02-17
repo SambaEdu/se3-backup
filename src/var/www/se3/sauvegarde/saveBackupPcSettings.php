@@ -45,12 +45,12 @@
 	$c = mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'bck_user', '$bck_user', '0', 'utilisateur proprietaire backuppc', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
-
+			 ."VALUES (NULL , 'bck_user', '".mysql_real_escape_string($bck_user)."', '0', 'utilisateur proprietaire backuppc', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
+		
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$bck_user' , `cat` = '5'  WHERE `params`.`name` ='bck_user' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($bck_user)."' , `cat` = '5'  WHERE `params`.`name` ='bck_user' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 	
@@ -61,12 +61,12 @@
 	$c = mysql_query($sql) or die("ERREUR: $sql");
 	if (mysql_num_rows($c) == 0 ) {
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
-			 ."VALUES (NULL , 'bck_uidnumber', '$bck_uidnumber', '0', 'uidnumber proprietaire backuppc', '5');";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+			 ."VALUES (NULL , 'bck_uidnumber', '".mysql_real_escape_string($bck_uidnumber)."', '0', 'uidnumber proprietaire backuppc', '5');";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 
 	} else {
-		$sql2 = "UPDATE `params` SET `value` = '$bck_uidnumber' , `cat` = '5' WHERE `params`.`name` ='bck_uidnumber' ;";
-		$c2 = mysql_query($sql2) or die("ERREUR: $sql2");
+		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($bck_uidnumber)."' , `cat` = '5' WHERE `params`.`name` ='bck_uidnumber' ;";
+		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
 	}
 
 
