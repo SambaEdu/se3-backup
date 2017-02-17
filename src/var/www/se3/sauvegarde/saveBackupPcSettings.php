@@ -47,6 +47,7 @@
 		$sql2 = "INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )"
 			 ."VALUES (NULL , 'bck_user', '".mysql_real_escape_string($bck_user)."', '0', 'utilisateur proprietaire backuppc', '5');";
 		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
+		
 	} else {
 		$sql2 = "UPDATE `params` SET `value` = '".mysql_real_escape_string($bck_user)."' , `cat` = '5'  WHERE `params`.`name` ='bck_user' ;";
 		$c2 = mysql_query($sql2) or die("ERREUR: ".htmlspecialchars($sql2, ENT_QUOTES, 'UTF-8'));
